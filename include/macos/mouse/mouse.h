@@ -6,9 +6,15 @@
 
 typedef enum ClickType {
   RIGHT = kCGMouseButtonRight,
-  CENTER = kCGMouseButtonCenter,
   LEFT = kCGMouseButtonLeft
 } ClickType;
+
+typedef enum ClickDirection {
+  RIGHT_DOWN = kCGEventRightMouseDown,
+  RIGHT_UP = kCGEventRightMouseUp,
+  LEFT_DOWN = kCGEventLeftMouseDown,
+  LEFT_UP = kCGEventLeftMouseUp,
+} ClickDirection;
 
 /// Move the mouse cursor to a position on the screen
 void moveCursor(int x, int y);
@@ -17,7 +23,6 @@ void moveCursor(int x, int y);
 CGPoint getCursorLocation();
 
 /// Click the mouse in a certain way
-void clickMouseDown(ClickType type);
-void clickMouseUp(ClickType type);
+void clickMouse(ClickType type, ClickDirection dir);
 
 #endif /* MACOS_MOUSE_H */

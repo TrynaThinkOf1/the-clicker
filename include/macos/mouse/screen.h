@@ -1,7 +1,7 @@
 #ifndef MACOS_SCREEN_H
 #define MACOS_SCREEN_H
 
-#include <ApplicationServices/ApplicationServices.h>
+#include <ApplicationServices/ApplicationServices.h> // MacOS Quartz Display Services
 
 /// Get the width and height of the display unit
 static void getScreenSize(int* width, int* height) {

@@ -21,7 +21,7 @@ void moveCursor(int x, int y) {
 
 CGPoint getCursorLocation() {
   CGEventRef event = CGEventCreate(NULL); // create an event representing the current state
-  CGPoint location = CGEventGetUnflippedLocation(event); // get the location of said event
+  CGPoint location = CGEventGetLocation(event); // get the location of said event
 
   CFRelease(event); // free the event
 
@@ -29,13 +29,18 @@ CGPoint getCursorLocation() {
 }
 
 
-void clickMouseDown(ClickType type) {
+void clickMouse(ClickType type, ClickDirection dir) {
   if (CGEventSourceButtonState(kCGEventSourceStateHIDSystemState, type)) return; // button already down
-  
+
   CGEventRef event = CGEventCreateMouseEvent(
     NULL, // nullable source of event
-    kCGEventLeftMouseDown, // type of event // TODO: Fix this
+    dir, // type of event // TODO: Fix this
     getCursorLocation(), // click in the current position
-    kCGMouseButtonLeft // type of click
+    type // type of click
   );
+
+  // post the event to the queue
+  CGEventPost(kCGHIDEventTap, event);
+
+  CFRelease(event); // free the event
 }
