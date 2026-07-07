@@ -9,7 +9,7 @@
 
 
 /// built-in function for left clicking at a certain position
-static leftClick(int x = -1, int y = -1) {
+static void leftClick(int x = -1, int y = -1) {
   if (x >= 0 && y >= 0) move(x, y);
 
   clickMouse(LEFT, LEFT_DOWN);
@@ -17,7 +17,7 @@ static leftClick(int x = -1, int y = -1) {
 }
 
 /// built-in function for right clicking at a certain position
-static rightClick(int x = -1, int y = -1) {
+static void rightClick(int x = -1, int y = -1) {
   if (x >= 0 && y >= 0) move(x, y);
 
   clickMouse(RIGHT, RIGHT_DOWN);
@@ -27,13 +27,13 @@ static rightClick(int x = -1, int y = -1) {
 //
 
 /// built-in function for double left clicking at a certain position
-static leftDoubleClick(int x = -1, int y = -1) {
+static void leftDoubleClick(int x = -1, int y = -1) {
   leftClick(x, y);
   leftClick(x, y);
 }
 
 /// built-in function for double right clicking at a certain position
-static rightDoubleClick(int x = -1, int y = -1) {
+static void rightDoubleClick(int x = -1, int y = -1) {
   rightClick(x, y);
   rightClick(x, y);
 }
