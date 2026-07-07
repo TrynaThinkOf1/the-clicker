@@ -3,20 +3,21 @@
 
 #include <ApplicationServices/ApplicationServices.h> // MacOS Quartz Event Services
 
+
+typedef enum ClickType {
+  RIGHT = kCGMouseButtonRight,
+  CENTER = kCGMouseButtonCenter,
+  LEFT = kCGMouseButtonLeft
+} ClickType;
+
 /// Move the mouse cursor to a position on the screen
-static void move(int x, int y) {
-  // create the event, does nothing yet
-  CGEventRef event = CGEventCreateMouseEvent(
-    NULL, // nullable source of event
-    kCGEventMouseMoved, // type of event
-    CGPointMake(x, y), // where to move the mouse
-    kCGMouseButtonLeft // ignored
-  );
+void moveCursor(int x, int y);
 
-  // post the event to the queue
-  CGEventPost(kCGHIDEventTap, event);
+/// Get current location of cursor
+CGPoint getCursorLocation();
 
-  CFRelease(event); // free the event
-}
+/// Click the mouse in a certain way
+void clickMouseDown(ClickType type);
+void clickMouseUp(ClickType type);
 
 #endif /* MACOS_MOUSE_H */
