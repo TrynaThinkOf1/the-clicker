@@ -1,0 +1,1 @@
+clang -Wall -framework ApplicationServices -Iinclude src/main.c -o clicker
