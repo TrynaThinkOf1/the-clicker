@@ -11,12 +11,30 @@
   #include <string.h>
   #include <stdbool.h>
 
-  extern volatile int fd; // whoops
+  typedef enum ClickType {
+    RIGHT = BTN_RIGHT,
+    LEFT = BTN_LEFT
+  } ClickType;
 
-  void emit(int fd, int type, int code, int val);
+  /// much simpler than the Quartz stuff
+  typedef enum ClickDirection {
+    RIGHT_DOWN = 1,
+    RIGHT_UP = 0,
+    LEFT_DOWN = 1,
+    LEFT_UP = 0
+  } ClickDirection;
+
+  extern volatile int fd;
+
+  /// helper function to actually send the event to the kernel
+  void emit(int fd_, int type, int code, int val);
 
   bool initializeMouse();
   void destroyMouse();
+
+  void moveCursor(int x, int y);
+
+  void clickMouse(ClickType type, ClickDirection dir);
 
 #endif
 

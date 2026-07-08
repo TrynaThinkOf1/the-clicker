@@ -24,6 +24,7 @@
 
     write(fd_, &ie, sizeof(ie));
   }
+  
 
   bool initializeMouse() {
     /*
@@ -61,6 +62,21 @@
   void destroyMouse() {
     ioctl(fd, UI_DEV_DESTROY);
     if (fd >= 0) close(fd);
+  }
+
+  //
+
+  void moveCursor(int x, int y) {
+    emit(fd, EV_REL, REL_X, x); // move x
+    emit(fd, EV_REL, REL_Y, y); // move y
+    
+    emit(fd, EV_SYN, SYN_REPORT, 0); // synchronize the event with the actual display
+  }
+
+
+  void clickMouse(ClickType type, ClickDirection dir) {
+    emit(fd, EV_KEY, type, dir);
+    emit(fd, EV_SYN, SYN_REPORT, 0);
   }
 
 #endif
