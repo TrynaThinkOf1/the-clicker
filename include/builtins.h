@@ -7,6 +7,8 @@
   #include "linux/mouse/mouse.h"
 #endif
 
+#include <unistd.h>
+
 
 /// built-in function for left clicking at a certain position
 /// set x and y to -1 for the current position

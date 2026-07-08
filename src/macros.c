@@ -2,7 +2,7 @@
 
 #include <ApplicationServices/ApplicationServices.h> // MacOS Quartz Event Services
 
-#include <unistd.h>
+#include <stdlib.h>
 
 #include "builtins.h"
 
