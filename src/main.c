@@ -18,9 +18,6 @@
 
 
 int main(int argc, char** argv) {
-  Macro* mac = initializeMacro();
-  addMacroStep(mac, leftClick, 500, 500);
-  runMacro(mac);
 
   return 0;
 }
