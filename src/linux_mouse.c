@@ -53,6 +53,8 @@
 
     ioctl(fd, UI_DEV_SETUP, &usetup);
     ioctl(fd, UI_DEV_CREATE);
+
+    return true;
   }
 
   void destroyMouse() {

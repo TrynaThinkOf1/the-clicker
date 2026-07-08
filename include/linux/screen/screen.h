@@ -7,10 +7,7 @@
 
   /// Get the width and height of the display unit
   static void getScreenSize(int* width, int* height) {
-    char* window_id;
     Display* dpy;
-    Window w;
-
     if (!(dpy = XOpenDisplay(0))) {
       *width = 0;
       *height = 0;

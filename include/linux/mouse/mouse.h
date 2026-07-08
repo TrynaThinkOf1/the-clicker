@@ -11,7 +11,7 @@
   #include <string.h>
   #include <stdbool.h>
 
-  volatile int fd;
+  extern volatile int fd; // whoops
 
   void emit(int fd, int type, int code, int val);
 
