@@ -11,6 +11,11 @@
 
 #include "macros.h"
 
+/*
+ * Don't worry about all of the repeated calls to `getFullPath`, the compiler
+ * caches it in a register so it's not actually getting called 100 times
+ */
+
 char* getFullPath(const char* dir, const char* name) {
   uid_t uid = getuid(); // find the ID of the user
   struct passwd* info = getpwuid(uid); // get the user's info NOT PASSWORD!!
@@ -77,12 +82,16 @@ bool nameExists(const char* name) {
 
 bool exportMacro(const Macro* mac, const char* name) {
   if (nameExists(name)) return false;
-  if (!directoryExists(MACRO_STORAGE)) createDirectory(MACRO_STORAGE);
+  if (!directoryExists(MACRO_STORAGE)) if (!createDirectory(MACRO_STORAGE)) return false;
 
   char* full_path = getFullPath(MACRO_STORAGE, name);
   if (full_path == NULL) return false;
   
   FILE* file = fopen(full_path, "w");
+  if (file == NULL) {
+    free(full_path);
+    return false;
+  }
   
 
   fclose(file);
@@ -91,6 +100,19 @@ bool exportMacro(const Macro* mac, const char* name) {
 }
 
 Macro* importMacro(const char* name) {
+  if (!nameExists(name)) return NULL;
+  
+  char* full_path = getFullPath(MACRO_STORAGE, name);
+  if (full_path == NULL) return false;
+
+  FILE* file = fopen(full_path, "r");
+  if (file == NULL) {
+    free(full_path);
+    return false;
+  }
+
+  fclose(file);
+  free(full_path);
   return NULL;
 }
 
