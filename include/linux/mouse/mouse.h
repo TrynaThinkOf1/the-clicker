@@ -15,7 +15,7 @@
   void emit(int fd, int type, int code, int val);
 
   bool initializeMouse();
-  bool destroyMouse();
+  void destroyMouse();
 
 #endif
 
