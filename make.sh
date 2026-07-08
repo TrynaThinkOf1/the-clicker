@@ -1,1 +1,1 @@
-clang -Wall -framework ApplicationServices -Iinclude src/main.c src/macos_mouse.c -o clicker
+clang -Wall -framework ApplicationServices -Iinclude src/main.c src/macos_mouse.c src/macros.c -o clicker
