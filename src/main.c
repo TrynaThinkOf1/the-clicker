@@ -16,7 +16,10 @@
 
 
 int main(int argc, char** argv) {
-  initializeMouse(); // this is only necessary for linux, but macos has a dummy version for API uniformity
+  if (!initializeMouse()) { // this is only necessary for linux, but macos has a dummy version for API uniformity
+    printf("Coudlnt initialize mouse!");
+    return 1;
+  }
   destroyMouse(); // same as the initializer function above
 
   int width, height;

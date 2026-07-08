@@ -28,7 +28,7 @@
     * All of this code is inspired by / taken from the kernel docs:
     * https://www.kernel.org/doc/html/latest/input/uinput.html
     */
-    struct uinput_setup usetup;
+    struct uinput_setup usetup = {0};
 
     fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
     if (fd < 0) {
@@ -38,12 +38,11 @@
       return false;
     }
 
-    ioctl(fd, UI_SET_EVBIT, EV_KEY);
-    ioctl(fd, UI_SET_KEYBIT, BTN_LEFT);
-
-    ioctl(fd, UI_SET_EVBIT, EV_REL);
-    ioctl(fd, UI_SET_RELBIT, REL_X);
-    ioctl(fd, UI_SET_RELBIT, REL_Y);
+    if (ioctl(fd, UI_SET_EVBIT, EV_KEY) < 0) return false;
+    if (ioctl(fd, UI_SET_KEYBIT, BTN_LEFT) < 0) return false;
+    if (ioctl(fd, UI_SET_EVBIT, EV_REL) < 0) return false;
+    if (ioctl(fd, UI_SET_RELBIT, REL_X) < 0) return false;
+    if (ioctl(fd, UI_SET_RELBIT, REL_Y) < 0) return false;
 
     memset(&usetup, 0, sizeof(usetup));
     usetup.id.bustype = BUS_USB;
@@ -51,8 +50,8 @@
     usetup.id.product = 0x0001; /* virtual product - not defined */
     strcpy(usetup.name, "Virtual device");
 
-    ioctl(fd, UI_DEV_SETUP, &usetup);
-    ioctl(fd, UI_DEV_CREATE);
+    if (ioctl(fd, UI_DEV_SETUP, &usetup) < 0) return false;
+    if (ioctl(fd, UI_DEV_CREATE) < 0) return false;
 
     return true;
   }
