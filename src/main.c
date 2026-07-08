@@ -17,7 +17,7 @@
 
 int main(int argc, char** argv) {
   if (!initializeMouse()) { // this is only necessary for linux, but macos has a dummy version for API uniformity
-    printf("Coudlnt initialize mouse!");
+    printf("Coudlnt initialize mouse!\n");
     return 1;
   }
   destroyMouse(); // same as the initializer function above

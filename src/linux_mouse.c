@@ -2,6 +2,8 @@
 
 #if defined(__LINUX__) || defined(__unix__)
 
+  volatile int fd = -1;
+
   #include <stdio.h>
   #include <fcntl.h>
   #include <unistd.h>
@@ -58,7 +60,7 @@
 
   void destroyMouse() {
     ioctl(fd, UI_DEV_DESTROY);
-    close(fd);
+    if (fd >= 0) close(fd);
   }
 
 #endif
