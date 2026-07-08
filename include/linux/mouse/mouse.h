@@ -6,23 +6,16 @@
   #include <stdio.h>
   #include <fcntl.h>
   #include <unistd.h>
-  #include <linux/uinput.h>
   #include <sys/ioctl.h>
   #include <string.h>
   #include <stdbool.h>
+  #include <linux/uinput.h>
+  #include <linux/input-event-codes.h>
 
   typedef enum ClickType {
     RIGHT = BTN_RIGHT,
     LEFT = BTN_LEFT
   } ClickType;
-
-  /// much simpler than the Quartz stuff
-  typedef enum ClickDirection {
-    RIGHT_DOWN = 1,
-    RIGHT_UP = 0,
-    LEFT_DOWN = 1,
-    LEFT_UP = 0
-  } ClickDirection;
 
   extern volatile int fd;
 
@@ -34,7 +27,7 @@
 
   void moveCursor(int x, int y);
 
-  void clickMouse(ClickType type, ClickDirection dir);
+  void clickMouse(ClickType type, bool click_down);
 
 #endif
 

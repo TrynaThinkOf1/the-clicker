@@ -11,13 +11,6 @@
     LEFT = kCGMouseButtonLeft
   } ClickType;
   
-  typedef enum ClickDirection {
-    RIGHT_DOWN = kCGEventRightMouseDown,
-    RIGHT_UP = kCGEventRightMouseUp,
-    LEFT_DOWN = kCGEventLeftMouseDown,
-    LEFT_UP = kCGEventLeftMouseUp,
-  } ClickDirection;
-  
   /// dummy functions
   static bool initializeMouse() {
     return true;
@@ -33,7 +26,7 @@
   CGPoint getCursorLocation();
   
   /// Click the mouse in a certain way
-  void clickMouse(ClickType type, ClickDirection dir);
+  void clickMouse(ClickType type, bool click_down);
 #endif
 
 #endif /* MACOS_MOUSE_H */

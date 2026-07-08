@@ -22,9 +22,5 @@ int main(int argc, char** argv) {
   }
   destroyMouse(); // same as the initializer function above
 
-  int width, height;
-  getScreenSize(&width, &height); // true cross-platform test -- works on MacOS
-  printf("Display Size: %ix%i\n", width, height);
-
   return 0;
 }

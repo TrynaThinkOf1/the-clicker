@@ -7,10 +7,11 @@
   #include <stdio.h>
   #include <fcntl.h>
   #include <unistd.h>
-  #include <linux/uinput.h>
   #include <sys/ioctl.h>
   #include <string.h>
   #include <stdbool.h>
+  #include <linux/uinput.h>
+  #include <linux/input-event-codes.h>
 
   void emit(int fd_, int type, int code, int val) {
     struct input_event ie;
@@ -18,9 +19,6 @@
     ie.type = type;
     ie.code = code;
     ie.value = val;
-    /* timestamp values below are ignored */
-    ie.time.tv_sec = 0;
-    ie.time.tv_usec = 0;
 
     write(fd_, &ie, sizeof(ie));
   }
@@ -74,8 +72,8 @@
   }
 
 
-  void clickMouse(ClickType type, ClickDirection dir) {
-    emit(fd, EV_KEY, type, dir);
+  void clickMouse(ClickType type, bool click_down) {
+    emit(fd, EV_KEY, type, (int)click_down);
     emit(fd, EV_SYN, SYN_REPORT, 0);
   }
 

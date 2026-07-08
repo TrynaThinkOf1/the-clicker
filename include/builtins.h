@@ -15,8 +15,8 @@
 static void leftClick(int x, int y) {
   if (x >= 0 && y >= 0) moveCursor(x, y);
 
-  clickMouse(LEFT, LEFT_DOWN);
-  clickMouse(LEFT, LEFT_UP);
+  clickMouse(LEFT, true);
+  clickMouse(LEFT, false);
 }
 
 /// built-in function for right clicking at a certain position
@@ -24,8 +24,8 @@ static void leftClick(int x, int y) {
 static void rightClick(int x, int y) {
   if (x >= 0 && y >= 0) moveCursor(x, y);
 
-  clickMouse(RIGHT, RIGHT_DOWN);
-  clickMouse(RIGHT, RIGHT_UP);
+  clickMouse(RIGHT, true);
+  clickMouse(RIGHT, false);
 }
 
 //
@@ -52,7 +52,7 @@ static void rightDoubleClick(int x, int y) {
 /// SET X TO A # > 0 AND THAT AMOUNT OF TIME
 /// WILL BE SLEPT. SET Y TO 0.
 static void sleep_m(int x, int y) {
-  sleep(x);
+  usleep(x * 1000); // convert to milliseconds
 }
 
 #endif /* BUILTINS_H */

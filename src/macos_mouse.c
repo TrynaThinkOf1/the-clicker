@@ -31,12 +31,15 @@
   }
 
 
-  void clickMouse(ClickType type, ClickDirection dir) {
+  void clickMouse(ClickType type, bool click_down) {
     if (CGEventSourceButtonState(kCGEventSourceStateHIDSystemState, type)) return; // button already down
 
     CGEventRef event = CGEventCreateMouseEvent(
       NULL, // nullable source of event
-      dir, // type of event // TODO: Fix this
+      (type == RIGHT
+        ? (click_down ? kCGEventRightMouseDown : kCGEventRightMouseUp)
+        : (click_down ? kCGEventLeftMouseDown : kCGEventLeftMouseUp)
+      ), // type of event
       getCursorLocation(), // click in the current position
       type // type of click
     );
