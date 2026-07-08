@@ -1,7 +1,5 @@
 #include <stdio.h>
 
-#include <ApplicationServices/ApplicationServices.h>
-
 #if defined(__APPLE__) || defined(__MACH__)
   #include "macos/screen/screen.h"
   #include "macos/mouse/mouse.h"
@@ -18,6 +16,8 @@
 
 
 int main(int argc, char** argv) {
+  initializeMouse(); // this is only necessary for linux, but macos has a dummy version for API uniformity
+  destroyMouse(); // same as the initializer function above
 
   return 0;
 }
