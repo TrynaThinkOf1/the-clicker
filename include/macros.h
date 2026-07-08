@@ -7,8 +7,6 @@
   #include "linux/mouse/mouse.h"
 #endif
 
-#include <ApplicationServices/ApplicationServices.h> // MacOS Quartz Event Services
-
 #include <stdlib.h>
 
 #include "builtins.h"

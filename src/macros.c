@@ -1,7 +1,5 @@
 #include "macros.h"
 
-#include <ApplicationServices/ApplicationServices.h> // MacOS Quartz Event Services
-
 #include <stdlib.h>
 
 #include "builtins.h"

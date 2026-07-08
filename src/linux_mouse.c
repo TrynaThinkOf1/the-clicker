@@ -7,6 +7,7 @@
   #include <unistd.h>
   #include <linux/uinput.h>
   #include <sys/ioctl.h>
+  #include <string.h>
   #include <stdbool.h>
 
   void emit(int fd_, int type, int code, int val) {

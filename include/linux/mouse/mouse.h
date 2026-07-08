@@ -8,6 +8,7 @@
   #include <unistd.h>
   #include <linux/uinput.h>
   #include <sys/ioctl.h>
+  #include <string.h>
   #include <stdbool.h>
 
   volatile int fd;
