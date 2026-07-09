@@ -5,6 +5,8 @@
   #include "macos/mouse/mouse.h"
 #elif defined(__LINUX__) || defined(__unix__)
   #include "linux/mouse/mouse.h"
+#elif defined(__WINDOWS__) || defined(_WIN32) || defined(__WIN64__)
+  #include "windows/mouse/mouse.h"
 #endif
 
 #include <unistd.h>
@@ -16,7 +18,9 @@ static void leftClick(int x, int y) {
   if (x >= 0 && y >= 0) moveCursor(x, y);
 
   clickMouse(LEFT, true);
+#if !defined(__WINDOWS__) && !defined(_WIN32) && !defined(__WIN64__)
   clickMouse(LEFT, false);
+#endif
 }
 
 /// built-in function for right clicking at a certain position
@@ -25,7 +29,9 @@ static void rightClick(int x, int y) {
   if (x >= 0 && y >= 0) moveCursor(x, y);
 
   clickMouse(RIGHT, true);
+#if !defined(__WINDOWS__) && !defined(_WIN32) && !defined(__WIN64__)
   clickMouse(RIGHT, false);
+#endif
 }
 
 //

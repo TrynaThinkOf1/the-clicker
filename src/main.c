@@ -6,6 +6,9 @@
 #elif defined(__LINUX__) || defined(__unix__)
   #include "linux/screen/screen.h"
   #include "linux/mouse/mouse.h"
+#elif defined(__WINDOWS__) || defined(_WIN32) || defined(__WIN64__)
+  #include "windows/screen/screen.h"
+  #include "windows/mouse/mouse.h"
 #else
   #error "Unknown Operating System"
 #endif
