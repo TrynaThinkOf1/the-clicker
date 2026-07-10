@@ -1,4 +1,4 @@
-#include "linux/export_macros.h"
+#include "linux/macro_storage.h"
 
 #if defined(__APPLE__) || defined(__MACH__) || defined(__LINUX__) || defined(__unix__)
 
@@ -12,6 +12,8 @@
   #include <stdbool.h>
 
   #include "macros.h"
+  #include "builtins.h"
+  #include "parse_int.h"
 
   /*
   * Don't worry about all of the repeated calls to `getFullPath`, the compiler
@@ -80,7 +82,9 @@
     return true;
   }
 
-  //
+  /*
+   * 
+   */
 
   bool exportMacro(const Macro* mac, const char* name) {
     if (mac->first == NULL) return false;
@@ -106,7 +110,7 @@
       fprintf(file, "\t");
       
       if (part->func == moveCursor) {
-        fprintf(file, "move(");
+        fprintf(file, "moveCursor(");
       } else if (part->func == leftClick) {
         fprintf(file, "leftClick(");
       } else if (part->func == rightClick) {
@@ -135,19 +139,119 @@
 
   Macro* importMacro(const char* name) {
     if (!nameExists(name)) return NULL;
+    printf("Name `%s` existed.\n", name);
 
     char* full_path = getFullPath(MACRO_STORAGE, name);
     if (full_path == NULL) return false;
+    printf("Full path `%s` created.\n", full_path);
 
     FILE* file = fopen(full_path, "r");
+    free(full_path);
     if (file == NULL) {
-      free(full_path);
       return false;
     }
+    printf("File opened successfully, file: `%p`.\n", file);
+
+    Macro* mac = initializeMacro();
+    if (mac == NULL) {
+      fclose(file);
+      return false;
+    }
+    printf("Macro allocated successfully, mac: `%p`.\n", mac);
+
+    char buffer[100];
+    int ch, idx = 0;
+    while ((ch = getc(file)) != EOF) {
+      while (ch != '\n' && idx < 99) {
+        buffer[idx] = ch;
+        ch = getc(file);
+        idx++;
+      }
+      buffer[idx + 1] = '\0';
+
+      int x = -2, y = -2;
+
+      // grab the x and y coordinate encoded
+      if (buffer[0] == '\t') {
+        int begindex = 0, endex;
+        
+        while (((buffer[begindex] < 48 || buffer[begindex] > 57) && buffer[begindex] != '-') && begindex < idx) begindex++;
+        if (begindex < idx) {
+          endex = begindex;
+          while ((buffer[endex] >= 48 && buffer[endex] <= 57 || buffer[endex] == '-') && endex < idx) endex++;
+          if (endex > begindex) {
+            printf("buffer: `%s`, begindex: %i, endex: %i\n", buffer, begindex, endex);
+            x = parse_int(&buffer[begindex], endex - begindex - (buffer[begindex] == '-' ? 2 : 1));
+            printf("x parsed successfully, x: %i.\n", x);
+          }
+
+          begindex = endex + 2;
+          endex = begindex;
+          if (begindex < idx) {
+            while ((buffer[endex] >= 48 && buffer[endex] <= 57 || buffer[endex] == '-') && endex < idx) endex++;
+            if (endex > begindex) {
+              printf("buffer: `%s`, begindex: %i, endex: %i\n", buffer, begindex, endex);
+              y = parse_int(&buffer[begindex], endex - begindex - (buffer[begindex] == '-' ? 2 : 1));
+              printf("y parsed successfully, y: %i.\n", y);
+            }
+          }
+        }
+      }
+
+      // parse the function name
+      if (x >= -1 && y >= -1) {
+        macro_part* part = malloc(sizeof(*part));
+        part->x = x;
+        part->y = y;
+        part->func = NULL; // placeholder
+        part->next = NULL;
+        
+        int endex = 1;
+        while (buffer[endex] != '(' && endex < idx) endex++;
+        char* name = malloc(endex);
+        if (name == NULL) continue;
+        strlcpy(name, buffer + 1, endex);
+        printf("Name: `%s`.\n", name);
+
+        if (strcmp(name, "moveCursor") == 0) {
+          part->func = moveCursor;
+        } else if (strcmp(name, "leftClick") == 0) {
+          part->func = leftClick;
+        } else if (strcmp(name, "rightClick") == 0) {
+          part->func = rightClick;
+        } else if (strcmp(name, "leftDoubleClick") == 0) {
+          part->func = leftDoubleClick;
+        } else if (strcmp(name, "rightDoubleClick") == 0) {
+          part->func = rightDoubleClick;
+        } else if (strcmp(name, "sleep_m") == 0) {
+          part->func = sleep_m;
+        }
+
+        if (part->func != NULL) {
+          if (mac->first == NULL) {
+            mac->first = part;
+            mac->last = part;
+            part->next = part;
+          } else {
+            mac->last->next = part;
+            mac->last = part;
+          }
+
+          printf("Name parsed successfully, name: `%s`.\n", name);
+          printf("\npart: {\n\tx: %i\n\ty: %i\n\n\tfunc: %p\n\tnext: %p\n}\n\n", x, y, part->func, part->next);
+        }
+
+        free(name);
+      }
+      
+      memset(buffer, 0, 100);
+      idx = 0;
+    } 
+    
+    // 
 
     fclose(file);
-    free(full_path);
-    return NULL;
+    return mac;
   }
 
   void deleteMacro(const char* name) {

@@ -1,5 +1,5 @@
-#ifndef UNIX_EXPORT_MACROS_H
-#define UNIX_EXPORT_MACROS_H
+#ifndef UNIX_MACRO_STORAGE_H
+#define UNIX_MACRO_STORAGE_H
 
 #if defined(__APPLE__) || defined(__MACH__) || defined(__LINUX__) || defined(__unix__)
 
@@ -13,6 +13,8 @@
   #include <stdbool.h>
 
   #include "macros.h"
+  #include "builtins.h"
+  #include "parse_int.h"
 
   #define MACRO_STORAGE "/.clicker_macros/"
   
@@ -30,4 +32,4 @@
 
 #endif
 
-#endif /* UNIX_EXPORT_MACROS_H */
+#endif /* UNIX_MACRO_STORAGE_H */
