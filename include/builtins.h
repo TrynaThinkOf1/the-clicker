@@ -3,14 +3,17 @@
 
 #if defined(__APPLE__) || defined(__MACH__)
   #include "macos/mouse/mouse.h"
+  #include <unistd.h>
 #elif defined(__LINUX__) || defined(__unix__)
   #include "linux/mouse/mouse.h"
+  #include <unistd.h>
 #elif defined(__WINDOWS__) || defined(_WIN32) || defined(__WIN64__)
   #include "windows/mouse/mouse.h"
+  #include <windows.h>
 #endif
 
-#include <unistd.h>
 
+extern void moveCursor(int x, int y);
 
 /// built-in function for left clicking at a certain position
 /// set x and y to -1 for the current position
@@ -58,7 +61,11 @@ static void rightDoubleClick(int x, int y) {
 /// SET X TO A # > 0 AND THAT AMOUNT OF TIME
 /// WILL BE SLEPT. SET Y TO 0.
 static void sleep_m(int x, int y) {
-  usleep(x * 1000); // convert to milliseconds
+  #if defined(__WINDOWS__) || defined(_WIN32) || defined(__WIN64__)
+    Sleep(x);
+  #else
+    usleep(x * 1000); // convert to milliseconds
+  #endif
 }
 
 #endif /* BUILTINS_H */
