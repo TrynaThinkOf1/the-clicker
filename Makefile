@@ -8,26 +8,30 @@ ifeq ($(OS), Windows_NT)
 else
   UNAME_S := $(shell uname -s)
   ifeq ($(UNAME_S), Linux)
-   	OSFLAGS =
+   	OSFLAGS = -lm
   endif
   ifeq ($(UNAME_S), Darwin)
    	OSFLAGS = -framework ApplicationServices
   endif
 endif
 
+
+GTKFLAGS = $(shell pkg-config --cflags gtk4)
+GTKLIBS = $(shell pkg-config --libs gtk4)
+
 IDIR = ./include
-LIBS = -lm
+LIBS =
 OPT = -O1
 VER = c17
-CFLAGS = -Wall -Wextra -std=$(VER) $(OPT) -I$(IDIR)
+CFLAGS = -Wall -Wextra -std=$(VER) $(OPT) -I$(IDIR) -MMD
 
 all: $(BDIR) $(BINARY)
 
 $(BINARY): $(OBJS)
-	cc $(CFLAGS) $(OBJS) -o $(BINARY) $(LIBS) $(OSFLAGS)
+	cc $(CFLAGS) $(GTKFLAGS) $(OBJS) -o $(BINARY) $(LIBS) $(GTKLIBS) $(OSFLAGS)
 
 $(BDIR)/%.o: src/%.c
-	cc $(CFLAGS) -c $< -o $@
+	cc $(CFLAGS) $(GTKFLAGS) -c $< -o $@
 
 $(BDIR):
 	mkdir -p $(BDIR)
@@ -38,3 +42,5 @@ $(BDIR):
 clean:
 	rm -rf build/
 	rm $(BINARY)
+
+-include $(patsubst $(BDIR)/%.o, $(BDIR)/%.d, $(OBJS))
