@@ -6,25 +6,15 @@
 #include <stdbool.h>
 
 
-static int parse_int(char* str) {
+static int parse_int(const char* str, int len) {
   int result = 0;
 
-  bool negative = false;
-  if (*str == '-') {
-    str++;
-    negative = true;
-  }
-  
-  int idx = strlen(str) - 1;
-  while (*str != '\0') {
-    char digit = (*str) - 48;
-    result += digit * pow(10, idx);
-
-    idx--;
-    str++;
+  int idx = 0;
+  for (char* c = str + len; c >= str; c--) {
+   	result += (*c - 48) * pow(10, idx);
+   	idx++;
   }
 
-  if (negative) result = ~result + 1; // CS:APP FOR THE WINNNN
   return result;
 }
 
