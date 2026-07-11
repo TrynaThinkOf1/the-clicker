@@ -5,29 +5,9 @@
 
 #include <gtk/gtk.h>
 
-#include "graphics/globals.h"
+#include "graphics/callbacks/loadGlobalSleepMS.h"
 #include "parse_int.h"
 
-
-struct entry_holder {
-  GtkWidget* e1;
-  GtkWidget* e2;
-  GtkWidget* e3;
-};
-
-struct entry_holder holder = {0};
-
-/// function to ensure that the global sleep timer for basic click timer is active
-static void load_global_sleep_ms(GtkWidget* widget, gpointer user_data) {
-  char* mins_text = gtk_entry_buffer_get_text(gtk_entry_get_buffer(holder.e1));
-  int mins = parse_int(mins_text, strlen(mins_text) - 1);
-  char* secs_text = gtk_entry_buffer_get_text(gtk_entry_get_buffer(holder.e2));
-  int secs = parse_int(secs_text, strlen(secs_text) - 1);
-  char* ms_text = gtk_entry_buffer_get_text(gtk_entry_get_buffer(holder.e3));
-  int ms = parse_int(ms_text, strlen(ms_text) - 1);
-
-  SLEEP_MS = (mins * 60 * 1000) + (secs * 1000) + ms;
-}
 
 /// disallow all non-digit characters in the buffer
 /// IMMA BE SO FR, I HAVE NO IDEA HOW THIS FUNCTION WORKS
@@ -63,15 +43,17 @@ static void interface_createTimeEntries(GtkWidget* grid) {
   GtkWidget* secs_entry = gtk_entry_new();
   GtkWidget* ms_entry = gtk_entry_new();
 
-  // TODO: This could be a potential stack issue for below
+   // load them into the global state holder
   holder.e1 = mins_entry;
   holder.e2 = secs_entry;
   holder.e3 = ms_entry;
+  //
 
   // only allow a certain # of digits
   gtk_entry_set_max_length(mins_entry, 3); // maximum of 999 minutes
   gtk_entry_set_max_length(secs_entry, 2); // maximum of 99 seconds, then it will overflow into minutes
   gtk_entry_set_max_length(ms_entry, 3); // maximum of 999 ms, then it overflows into seconds
+  //
 
   // placeholder text
   gtk_entry_set_placeholder_text(mins_entry, "0");
@@ -86,9 +68,9 @@ static void interface_createTimeEntries(GtkWidget* grid) {
   //
 
   // create the signal handlers for when input is added
-  g_signal_connect(G_OBJECT(mins_entry), "changed", G_CALLBACK(load_global_sleep_ms), NULL);
-  g_signal_connect(G_OBJECT(secs_entry), "changed", G_CALLBACK(load_global_sleep_ms), NULL);
-  g_signal_connect(G_OBJECT(ms_entry), "changed", G_CALLBACK(load_global_sleep_ms), NULL);
+  g_signal_connect(G_OBJECT(mins_entry), "changed", G_CALLBACK(callback_loadGlobalSleepMS), NULL);
+  g_signal_connect(G_OBJECT(secs_entry), "changed", G_CALLBACK(callback_loadGlobalSleepMS), NULL);
+  g_signal_connect(G_OBJECT(ms_entry), "changed", G_CALLBACK(callback_loadGlobalSleepMS), NULL);
 
   GtkEditable *mins_delegate = gtk_editable_get_delegate(GTK_EDITABLE(mins_entry));
   g_signal_connect(mins_delegate, "insert-text", G_CALLBACK(prevent_nd_chars), NULL);
