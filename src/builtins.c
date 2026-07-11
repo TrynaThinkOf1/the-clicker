@@ -34,6 +34,9 @@ void sleep_m(int x, int y) {
   #if defined(__WINDOWS__) || defined(_WIN32) || defined(__WIN64__)
     Sleep(x);
   #else
-    usleep(x * 1000); // convert to milliseconds
+    struct timespec ts;
+    ts.tv_sec = x / 1000;
+    ts.tv_nsec = (x % 1000) * 1000000;
+    nanosleep(&ts, NULL);
   #endif
 }

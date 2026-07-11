@@ -6,9 +6,11 @@
 #if defined(__APPLE__) || defined(__MACH__)
   #include "macos/mouse/mouse.h"
   #include <unistd.h>
+  #include <time.h>
 #elif defined(__LINUX__) || defined(__unix__)
   #include "linux/mouse/mouse.h"
   #include <unistd.h>
+  #include <time.h>
 #elif defined(__WINDOWS__) || defined(_WIN32) || defined(__WIN64__)
   #include "windows/mouse/mouse.h"
   #include <windows.h>
