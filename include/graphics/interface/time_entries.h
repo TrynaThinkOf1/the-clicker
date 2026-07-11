@@ -6,35 +6,9 @@
 #include <gtk/gtk.h>
 
 #include "graphics/callbacks/loadGlobalSleepMS.h"
+#include "graphics/callbacks/preventNonDigitInput.h"
 #include "parse_int.h"
 
-
-/// disallow all non-digit characters in the buffer
-/// IMMA BE SO FR, I HAVE NO IDEA HOW THIS FUNCTION WORKS
-static void prevent_nd_chars(GtkEditable* editable, const char* text, int length, int* position, gpointer user_data) {
-  bool nd;
-  for (int i = 0; i < length; i++) {
-    if (text[i] < 48 || text[i] > 57) {
-      nd = true;
-      break;
-    }
-  }
-
-  if (nd) {
-    GString *filtered = g_string_new(NULL);
-    for (int i = 0; i < length; i++) {
-        if (text[i] >= 48 && text[i] <= 57) {
-            g_string_append_c(filtered, text[i]);
-        }
-    }
-
-    g_signal_stop_emission_by_name(editable, "insert-text"); // stop the original signal
-
-    g_signal_handlers_block_by_func(editable, prevent_nd_chars, user_data); // block the signal to prevent recursion while inserting manually
-    gtk_editable_insert_text(editable, filtered->str, filtered->len, position); // insert the clean text at the current position
-    g_signal_handlers_unblock_by_func(editable, prevent_nd_chars, user_data); // unblock the signal
-  }
-}
 
 
 static void interface_createTimeEntries(GtkWidget* grid) {
@@ -73,11 +47,11 @@ static void interface_createTimeEntries(GtkWidget* grid) {
   g_signal_connect(G_OBJECT(ms_entry), "changed", G_CALLBACK(callback_loadGlobalSleepMS), NULL);
 
   GtkEditable *mins_delegate = gtk_editable_get_delegate(GTK_EDITABLE(mins_entry));
-  g_signal_connect(mins_delegate, "insert-text", G_CALLBACK(prevent_nd_chars), NULL);
+  g_signal_connect(mins_delegate, "insert-text", G_CALLBACK(callback_preventNonDigitInput), NULL);
   GtkEditable *secs_delegate = gtk_editable_get_delegate(GTK_EDITABLE(secs_entry));
-  g_signal_connect(secs_delegate, "insert-text", G_CALLBACK(prevent_nd_chars), NULL);
+  g_signal_connect(secs_delegate, "insert-text", G_CALLBACK(callback_preventNonDigitInput), NULL);
   GtkEditable *ms_delegate = gtk_editable_get_delegate(GTK_EDITABLE(ms_entry));
-  g_signal_connect(ms_delegate, "insert-text", G_CALLBACK(prevent_nd_chars), NULL);
+  g_signal_connect(ms_delegate, "insert-text", G_CALLBACK(callback_preventNonDigitInput), NULL);
   //
 
   // render the entries and labels
