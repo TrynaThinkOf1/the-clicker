@@ -3,17 +3,35 @@
 
 #include <gtk/gtk.h>
 
-#include "graphics/interface/grid_buttons.h"
+#include "graphics/styling/css_provider.h"
+#include "graphics/interface/time_entries.h"
 
 static void activate(GtkApplication* app, gpointer user_data) {
   GtkWidget* window;
-  
+
   window = gtk_application_window_new(app);
   gtk_window_set_title(GTK_WINDOW(window), "The Clicker");
   gtk_window_set_default_size(GTK_WINDOW(window), 600, 400);
 
-  add_grid_buttons(window);
+  GtkWidget* click_timer_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+  gtk_widget_set_halign(click_timer_box, GTK_ALIGN_START);
+  gtk_widget_set_valign(click_timer_box, GTK_ALIGN_START);
+
+  // create global window grid for loading elements
+  GtkWidget* grid = gtk_grid_new();
+  interface_createTimeEntries(grid); // add the inputs for mins, secs, ms
+  gtk_box_append(GTK_BOX(click_timer_box), grid);
+
+  gtk_window_set_child(GTK_WINDOW(window), click_timer_box);
+
+  // styling for everything
+  gtk_widget_add_css_class(window, "window"); // create root window styles class
   
+  gtk_widget_add_css_class(click_timer_box, "click-timer-box"); // add a class to style the click timer box
+  gtk_widget_set_overflow(click_timer_box, GTK_OVERFLOW_HIDDEN); // prevent corner clipping, hard to explain
+
+  styling_createCSS(); // create the styles
+
   gtk_window_present(GTK_WINDOW(window));
 }
 
