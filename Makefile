@@ -16,7 +16,7 @@ else
 endif
 
 
-GTKFLAGS = $(shell pkg-config --cflags gtk4)
+GTKFLAGS = $(shell pkg-config --cflags gtk4) -Wno-incompatible-pointer-types
 GTKLIBS = $(shell pkg-config --libs gtk4)
 
 IDIR = ./include
