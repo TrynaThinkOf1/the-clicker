@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <pthread.h>
+
 #include "builtins.h"
 
 /*
@@ -27,6 +29,8 @@ int CLICK_Y = 0;
 void (*CLICK_FUNC)(int x, int y) = leftClick;
 
 bool click_timer_is_active = false;
+
+pthread_t click_timer_thread;
 //
 
 #endif /* GLOBALS_H */

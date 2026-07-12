@@ -2,6 +2,9 @@ BDIR = ./build
 BINARY = clicker.exe
 CC = gcc
 
+
+GTKFLAGS = $(shell pkg-config --cflags gtk4) -Wno-incompatible-pointer-types
+GTKLIBS = $(shell pkg-config --libs gtk4)
 CFLAGS = -Wall -Wextra -std=c17 -O1 -I./include
 LIBS = -lm
 
@@ -10,10 +13,10 @@ OBJS = $(patsubst src/%.c,$(BDIR)/%.o,$(wildcard src/*.c))
 all: $(BDIR) $(BINARY)
 
 $(BINARY): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(BINARY) $(LIBS)
+	$(CC) $(CFLAGS) $(GTKFLAGS) $(OBJS) -o $(BINARY) $(LIBS) $(GTKLIBS)
 
 $(BDIR)/%.o: src/%.c | $(BDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(GTKFLAGS) -c $< -o $@
 
 $(BDIR):
 	mkdir $(BDIR)

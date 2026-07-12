@@ -20,7 +20,7 @@ GTKFLAGS = $(shell pkg-config --cflags gtk4) -Wno-incompatible-pointer-types
 GTKLIBS = $(shell pkg-config --libs gtk4)
 
 IDIR = ./include
-LIBS =
+LIBS = -lpthread
 OPT = -O1
 VER = c17
 CFLAGS = -Wall -Wextra -std=$(VER) $(OPT) -I$(IDIR) -MMD
