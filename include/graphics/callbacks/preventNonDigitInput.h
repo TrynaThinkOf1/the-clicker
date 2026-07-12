@@ -7,7 +7,7 @@
 /// disallow all non-digit characters in the buffer
 /// IMMA BE SO FR, I HAVE NO IDEA HOW THIS FUNCTION WORKS
 static void callback_preventNonDigitInput(GtkEditable* editable, const char* text, int length, int* position, gpointer user_data) {
-  bool nd;
+  bool nd = false;
   for (int i = 0; i < length; i++) {
     if (text[i] < 48 || text[i] > 57) {
       nd = true;
