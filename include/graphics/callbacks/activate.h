@@ -6,7 +6,7 @@
 #include "graphics/styling/css_provider.h"
 #include "graphics/interface/click_timer_entries.h"
 #include "graphics/interface/click_timer_func_selector.h"
-#include "graphics/interface/click_timer_start_button.h"
+#include "graphics/interface/click_timer_start_stop_button.h"
 
 static void activate(GtkApplication* app, gpointer user_data) {
   GtkWidget* window;
@@ -24,22 +24,27 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
    // grid for storing elements
   GtkWidget* timer_entry_grid = gtk_grid_new();
-  GtkWidget* selector_and_start_grid = gtk_grid_new();
+  //GtkWidget* selector_and_start_grid = gtk_grid_new();
 
   interface_createTimeEntries(timer_entry_grid); // add the inputs for mins, secs, ms
-  interface_createFunctionSelector(selector_and_start_grid); // add the dropdown menu for selecting click function
-  interface_createStartButton(selector_and_start_grid);
-  
+  interface_createFunctionSelector(timer_entry_grid); // add the dropdown menu for selecting click function
+  interface_createStartStopButton(timer_entry_grid);
+
   gtk_box_append(GTK_BOX(click_timer_box), timer_entry_grid);
-  gtk_box_append(GTK_BOX(click_timer_box), selector_and_start_grid);
+  //gtk_box_append(GTK_BOX(click_timer_box), selector_and_start_grid);
   gtk_window_set_child(GTK_WINDOW(window), click_timer_box);
 
    // styling
   gtk_widget_add_css_class(click_timer_box, "click-timer-box"); // add a class to style the click timer box
   gtk_widget_set_overflow(click_timer_box, GTK_OVERFLOW_HIDDEN); // prevent corner clipping, hard to explain
+
+  // global styling
+  styling_createCSS(); // create the styles
   //
 
-  styling_createCSS(); // create the styles
+  // about dialoge
+   // TODO: Implement
+  //
 
   gtk_window_present(GTK_WINDOW(window));
 }

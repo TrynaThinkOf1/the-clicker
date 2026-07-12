@@ -28,7 +28,7 @@ static void interface_createFunctionSelector(GtkWidget* grid) {
   //
 
   // add style classes for all labels and entries
-  //gtk_widget_add_css_class(mins_label, "click-timer-label");
+  gtk_widget_add_css_class(selector, "click-timer-func-selector");
   //
 }
 

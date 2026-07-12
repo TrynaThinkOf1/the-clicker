@@ -51,13 +51,13 @@ static void interface_createTimeEntries(GtkWidget* grid) {
   //
 
   // render the entries and labels
-  gtk_grid_attach(GTK_GRID(grid), mins_label, 0, 0, 2, 1);
-  gtk_grid_attach(GTK_GRID(grid), secs_label, 3, 0, 2, 1);
-  gtk_grid_attach(GTK_GRID(grid), ms_label, 6, 0, 2, 1);
+  gtk_grid_attach(GTK_GRID(grid), mins_label, 0, 0, 2, 1); // 0 0 2 1
+  gtk_grid_attach(GTK_GRID(grid), secs_label, 2, 0, 2, 1); // 3 0 2 1
+  gtk_grid_attach(GTK_GRID(grid), ms_label, 4, 0, 2, 1); // 6 0 2 1
 
-  gtk_grid_attach(GTK_GRID(grid), mins_entry, 0, 1, 2, 1);
-  gtk_grid_attach(GTK_GRID(grid), secs_entry, 3, 1, 2, 1);
-  gtk_grid_attach(GTK_GRID(grid), ms_entry, 6, 1, 2, 1);
+  gtk_grid_attach(GTK_GRID(grid), mins_entry, 0, 1, 2, 1); // 0 1 2 1
+  gtk_grid_attach(GTK_GRID(grid), secs_entry, 2, 1, 2, 1); // 3 1 2 1
+  gtk_grid_attach(GTK_GRID(grid), ms_entry, 4, 1, 2, 1); // 6 1 2 1
   //
 
   // add style classes for all labels and entries

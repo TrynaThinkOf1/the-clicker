@@ -30,6 +30,10 @@ static void styling_createCSS() {
     "  color: #945D5E; "
     "  margin: 2px; "
     "  font-weight: bold; "
+    "}"
+    ".click-timer-func-selector { "
+    "}"
+    ".click-timer-start-stop-button { "
     "}";
 
   gtk_css_provider_load_from_string(provider, CSS_DATA); // load the data into the provider
