@@ -1,10 +1,12 @@
 #ifndef CALLBACKS_LOADGLOBALSLEEPMS_H
 #define CALLBACKS_LOADGLOBALSLEEPMS_H
 
+#include <string.h>
+
 #include <gtk/gtk.h>
 
 #include "graphics/globals.h"
-
+#include "parse_int.h"
 
 /// function to ensure that the global sleep timer for basic click timer is active
 static void callback_loadGlobalSleepMS(GtkWidget* widget, gpointer user_data) {
