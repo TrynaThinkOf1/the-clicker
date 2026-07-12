@@ -1,14 +1,10 @@
-#ifndef INTERFACE_TIME_ENTRIES_H
-#define INTERFACE_TIME_ENTRIES_H
-
-#include <string.h>
+#ifndef INTERFACE_CLICK_TIMER_ENTRIES_H
+#define INTERFACE_CLICK_TIMER_ENTRIES_H
 
 #include <gtk/gtk.h>
 
 #include "graphics/callbacks/loadGlobalSleepMS.h"
 #include "graphics/callbacks/preventNonDigitInput.h"
-#include "parse_int.h"
-
 
 
 static void interface_createTimeEntries(GtkWidget* grid) {
@@ -79,4 +75,4 @@ static void interface_createTimeEntries(GtkWidget* grid) {
   //
 }
 
-#endif /* INTERFACE_TIME_ENTRIES_H */
+#endif /* INTERFACE_CLICK_TIMER_ENTRIES_H */

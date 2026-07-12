@@ -2,6 +2,9 @@
 #define GLOBALS_H
 
 #include <stdint.h>
+#include <stdbool.h>
+
+#include "builtins.h"
 
 /*
  * File to hold global variables that can be set
@@ -21,7 +24,9 @@ uint64_t SLEEP_MS = 0;
 
 int CLICK_X = 0;
 int CLICK_Y = 0;
-//(void* CLICK_FUNC)(int x, int y);
+void (*CLICK_FUNC)(int x, int y) = leftClick;
+
+bool click_timer_is_active = false;
 //
 
 #endif /* GLOBALS_H */

@@ -4,7 +4,9 @@
 #include <gtk/gtk.h>
 
 #include "graphics/styling/css_provider.h"
-#include "graphics/interface/time_entries.h"
+#include "graphics/interface/click_timer_entries.h"
+#include "graphics/interface/click_timer_func_selector.h"
+#include "graphics/interface/click_timer_start_button.h"
 
 static void activate(GtkApplication* app, gpointer user_data) {
   GtkWidget* window;
@@ -16,14 +18,20 @@ static void activate(GtkApplication* app, gpointer user_data) {
   gtk_widget_add_css_class(window, "window"); // create root window styles class
 
   // create click-timer box
-  GtkWidget* click_timer_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+  GtkWidget* click_timer_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
   gtk_widget_set_halign(click_timer_box, GTK_ALIGN_START);
   gtk_widget_set_valign(click_timer_box, GTK_ALIGN_START);
 
    // grid for storing elements
-  GtkWidget* grid = gtk_grid_new();
-  interface_createTimeEntries(grid); // add the inputs for mins, secs, ms
-  gtk_box_append(GTK_BOX(click_timer_box), grid);
+  GtkWidget* timer_entry_grid = gtk_grid_new();
+  GtkWidget* selector_and_start_grid = gtk_grid_new();
+
+  interface_createTimeEntries(timer_entry_grid); // add the inputs for mins, secs, ms
+  interface_createFunctionSelector(selector_and_start_grid); // add the dropdown menu for selecting click function
+  interface_createStartButton(selector_and_start_grid);
+  
+  gtk_box_append(GTK_BOX(click_timer_box), timer_entry_grid);
+  gtk_box_append(GTK_BOX(click_timer_box), selector_and_start_grid);
   gtk_window_set_child(GTK_WINDOW(window), click_timer_box);
 
    // styling
