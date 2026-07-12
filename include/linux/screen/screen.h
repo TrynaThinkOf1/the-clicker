@@ -5,18 +5,20 @@
 
   #include <X11/Xlib.h>
 
+  #include "linux/mouse/mouse.h" // for display
+
   /// Get the width and height of the display unit
   static void getScreenSize(int* width, int* height) {
-    Display* dpy;
-    if (!(dpy = XOpenDisplay(0))) {
-      *width = 0;
-      *height = 0;
+    Display* display;
+    if (!(display = XOpenDisplay(NULL))) {
+      *width = -1;
+      *height = -1;
       return;
     }
 
-    int snum = DefaultScreen(dpy);
-    *width = DisplayWidth(dpy, snum);
-    *height = DisplayHeight(dpy, snum);
+    int snum = DefaultScreen(display);
+    *width = DisplayWidth(display, snum);
+    *height = DisplayHeight(display, snum);
   }
 
 #endif

@@ -7,6 +7,16 @@
   #include "windows/screen/screen.h"
 
 
+  CursorPoint getCursorLocation() {
+    POINT p;
+    GetCursorPos(&p);
+    ScreenToClient(&p); // convert to local coords
+
+    CursorPoint loc = { p.x, p.y };
+    return loc;
+  }
+  
+  
   void moveCursor(int x, int y) {
     INPUT event = {0};
     int width, height;

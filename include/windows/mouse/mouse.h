@@ -5,6 +5,11 @@
 
   #include <Windows.h>
 
+  
+  typedef struct CursorPoint {
+    int x;
+    int y;
+  } CursorPoint;
 
   /// for windows these dont actually represent values, the API is different
   typedef enum ClickType {
@@ -19,6 +24,8 @@
   static void destroyMouse() {
     ;
   }
+
+  CursorPoint getCursorLocation();
 
   /// Move the mouse cursor to a position on the screen
   void moveCursor(int x, int y);

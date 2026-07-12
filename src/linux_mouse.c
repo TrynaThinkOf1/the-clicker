@@ -13,6 +13,9 @@
   #include <linux/uinput.h>
   #include <linux/input-event-codes.h>
 
+  #include <X11/Xlib.h>
+  
+
   void emit(int fd_, int type, int code, int val) {
     struct input_event ie;
 
@@ -54,12 +57,33 @@
     if (ioctl(fd, UI_DEV_SETUP, &usetup) < 0) return false;
     if (ioctl(fd, UI_DEV_CREATE) < 0) return false;
 
-    return true;
+    int width, height;
+    getCursorLocation(&width, &height);
+
+    return (*width >= 0 && *height >= 0);
   }
 
   void destroyMouse() {
     ioctl(fd, UI_DEV_DESTROY);
     if (fd >= 0) close(fd);
+
+    XCloseDisplay(display);
+  }
+
+  //
+
+  CursorPoint getCursorLocation() {
+    Window root = DefaultRootWindow(display);
+    Window root_return, child_return;
+    int root_x, root_y, win_x, win_y;
+    unsigned int mask_return;
+
+    // get global screen coordinates (root_x, root_y)
+    if (XQueryPointer(display, root, &root_return, &child_return,
+      &root_x, &root_y, &win_x, &win_y, &mask_return))
+
+    CursorPoint loc = { root_x, root_y };
+    return loc;
   }
 
   //

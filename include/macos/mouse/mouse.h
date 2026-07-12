@@ -5,6 +5,11 @@
 
   #include <ApplicationServices/ApplicationServices.h> // MacOS Quartz Event Services
   
+
+  typedef struct CursorPoint {
+    int x;
+    int y;
+  } CursorPoint;
   
   typedef enum ClickType {
     RIGHT = kCGMouseButtonRight,
@@ -23,7 +28,7 @@
   void moveCursor(int x, int y);
   
   /// Get current location of cursor
-  CGPoint getCursorLocation();
+  CursorPoint getCursorLocation();
   
   /// Click the mouse in a certain way
   void clickMouse(ClickType type, bool click_down);

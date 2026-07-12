@@ -21,18 +21,22 @@
   }
 
 
-  CGPoint getCursorLocation() {
+  CursorPoint getCursorLocation() {
     CGEventRef event = CGEventCreate(NULL); // create an event representing the current state
     CGPoint location = CGEventGetLocation(event); // get the location of said event
 
     CFRelease(event); // free the event
 
-    return location;
+    CursorPoint loc = { (int)location.x, (int)location.y };
+    return loc;
   }
 
 
   void clickMouse(ClickType type, bool click_down) {
     if (CGEventSourceButtonState(kCGEventSourceStateHIDSystemState, type)) return; // button already down
+
+    CursorPoint point = getCursorLocation();
+    CGPoint loc = { (double)point.x, (double)point.y };
 
     CGEventRef event = CGEventCreateMouseEvent(
       NULL, // nullable source of event
@@ -40,7 +44,7 @@
         ? (click_down ? kCGEventRightMouseDown : kCGEventRightMouseUp)
         : (click_down ? kCGEventLeftMouseDown : kCGEventLeftMouseUp)
       ), // type of event
-      getCursorLocation(), // click in the current position
+      loc, // click in the current position
       type // type of click
     );
 
