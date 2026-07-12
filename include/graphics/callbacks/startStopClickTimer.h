@@ -33,12 +33,16 @@ static void callback_startStopClickTimer(GtkWidget* widget, gpointer user_data) 
     
     click_timer_is_active = true;
     gtk_button_set_label(GTK_BUTTON(widget), "Stop");
+
+    gtk_widget_set_sensitive(FUNC_SELECTOR, false); // disallow new click functions
   } else if (click_timer_is_active) {
     // TODO: stop thread
     pthread_cancel(click_timer_thread);
     
     click_timer_is_active = false;
     gtk_button_set_label(GTK_BUTTON(widget), "Start");
+
+    gtk_widget_set_sensitive(FUNC_SELECTOR, true); // allow new click functions to be selected
   }
 }
 

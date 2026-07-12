@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <gtk/gtk.h>
 #include <pthread.h>
 
 #include "builtins.h"
@@ -26,7 +27,10 @@ uint64_t SLEEP_MS = 0;
 
 int CLICK_X = 0;
 int CLICK_Y = 0;
+
 void (*CLICK_FUNC)(int x, int y) = leftClick;
+GtkWidget* FUNC_SELECTOR;
+
 
 bool click_timer_is_active = false;
 
