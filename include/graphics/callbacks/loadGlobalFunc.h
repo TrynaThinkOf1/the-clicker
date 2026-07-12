@@ -25,6 +25,8 @@ static void callback_loadGlobalFunc(GtkWidget* widget, gpointer user_data) {
     case GTK_INVALID_LIST_POSITION:
       break;
   }
+  
+  g_print("pos: %i\n", pos);
 }
 
 #endif /* CALLBACKS_LOADGLOBALFUNC_H */

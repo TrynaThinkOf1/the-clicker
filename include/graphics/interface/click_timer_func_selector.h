@@ -21,7 +21,7 @@ static void interface_createFunctionSelector(GtkWidget* grid) {
   //
 
   // create the signal handlers for when input is added
-  g_signal_connect(FUNC_SELECTOR, "activate", G_CALLBACK(callback_loadGlobalFunc), NULL);
+  g_signal_connect(FUNC_SELECTOR, "notify::selected", G_CALLBACK(callback_loadGlobalFunc), NULL);
   //
 
   // render the entries and labels
