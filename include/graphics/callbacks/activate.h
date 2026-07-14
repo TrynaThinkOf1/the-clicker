@@ -5,6 +5,7 @@
 
 #include "graphics/styling/css_provider.h"
 #include "graphics/interface/click_timer_entries.h"
+#include "graphics/interface/click_timer_coords.h"
 #include "graphics/interface/click_timer_func_selector.h"
 #include "graphics/interface/click_timer_start_stop_button.h"
 
@@ -24,14 +25,13 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
    // grid for storing elements
   GtkWidget* timer_entry_grid = gtk_grid_new();
-  //GtkWidget* selector_and_start_grid = gtk_grid_new();
 
   interface_createTimeEntries(timer_entry_grid); // add the inputs for mins, secs, ms
+  interface_createCoordEntries(timer_entry_grid); // entries for the coordinates of the click
   interface_createFunctionSelector(timer_entry_grid); // add the dropdown menu for selecting click function
   interface_createStartStopButton(timer_entry_grid);
 
   gtk_box_append(GTK_BOX(click_timer_box), timer_entry_grid);
-  //gtk_box_append(GTK_BOX(click_timer_box), selector_and_start_grid);
   gtk_window_set_child(GTK_WINDOW(window), click_timer_box);
 
    // styling

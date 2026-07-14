@@ -16,7 +16,7 @@ static void interface_createStartStopButton(GtkWidget* grid) {
   //
 
   // render the entries and labels
-  gtk_grid_attach(GTK_GRID(grid), button, 3, 2, 3, 1);
+  gtk_grid_attach(GTK_GRID(grid), button, 0, 4, 6, 1);
   //
 
   // add style classes for all labels and entries

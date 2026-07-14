@@ -23,16 +23,23 @@ struct entry_holder {
 };
 struct entry_holder holder = {0};
 
+struct coord_holder {
+  GtkWidget* xentry;
+  GtkWidget* yentry;
+};
+struct coord_holder coords = {0};
+
 uint64_t SLEEP_MS = 0;
 
-int CLICK_X = 0;
-int CLICK_Y = 0;
+int CLICK_X = -1;
+int CLICK_Y = -1;
 
 void (*CLICK_FUNC)(int x, int y) = leftClick;
 GtkWidget* FUNC_SELECTOR;
 
 
 bool click_timer_is_active = false;
+volatile bool click_timer_should_stop = false;
 
 pthread_t click_timer_thread;
 //

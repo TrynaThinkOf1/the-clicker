@@ -25,7 +25,7 @@ static void interface_createFunctionSelector(GtkWidget* grid) {
   //
 
   // render the entries and labels
-  gtk_grid_attach(GTK_GRID(grid), FUNC_SELECTOR, 0, 2, 3, 1);
+  gtk_grid_attach(GTK_GRID(grid), FUNC_SELECTOR, 4, 3, 2, 1);
   //
 
   // add style classes for all labels and entries

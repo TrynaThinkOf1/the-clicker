@@ -33,8 +33,6 @@
 
 
   void clickMouse(ClickType type, bool click_down) {
-    if (CGEventSourceButtonState(kCGEventSourceStateHIDSystemState, type)) return; // button already down
-
     CursorPoint point = getCursorLocation();
     CGPoint loc = { (double)point.x, (double)point.y };
 
