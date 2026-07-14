@@ -5,6 +5,7 @@
 
 #include "graphics/callbacks/loadGlobalSleepMS.h"
 #include "graphics/callbacks/preventNonDigitInput.h"
+#include "graphics/globals.h"
 
 
 static void interface_createTimeEntries(GtkWidget* grid) {
