@@ -22,11 +22,13 @@ void rightClick(int x, int y) {
 
 void leftDoubleClick(int x, int y) {
   leftClick(x, y);
+  sleep_m(2, 0);
   leftClick(x, y);
 }
 
 void rightDoubleClick(int x, int y) {
   rightClick(x, y);
+  sleep_m(2, 0);
   rightClick(x, y);
 }
 
