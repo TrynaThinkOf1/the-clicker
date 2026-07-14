@@ -24,6 +24,9 @@ void freeMacro(Macro* mac) {
   }
 
   free(mac->last);
+
+  free(mac->name);
+  
   free(mac);
 }
 

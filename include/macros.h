@@ -8,6 +8,7 @@
 #endif
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "builtins.h"
 
@@ -21,6 +22,9 @@ typedef struct macro_part {
 } macro_part;
 
 typedef struct Macro {
+  char* name;
+  bool saved;
+  
   macro_part* first;
   macro_part* last;
 } Macro;

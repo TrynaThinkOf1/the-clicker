@@ -86,13 +86,13 @@
    * 
    */
 
-  bool exportMacro(const Macro* mac, const char* name) {
+  bool exportMacro(const Macro* mac) {
     if (mac->first == NULL) return false;
 
-    if (nameExists(name)) return false;
+    if (nameExists(mac->name)) return false;
     if (!directoryExists(MACRO_STORAGE)) if (!createDirectory(MACRO_STORAGE)) return false;
 
-    char* full_path = getFullPath(MACRO_STORAGE, name);
+    char* full_path = getFullPath(MACRO_STORAGE, mac->name);
     if (full_path == NULL) return false;
 
     FILE* file = fopen(full_path, "w");
@@ -103,7 +103,7 @@
 
     //
 
-    fprintf(file, "\"%s\": {\n", name);
+    fprintf(file, "\"%s\": {\n", mac->name);
 
     macro_part* part = mac->first;
     while (part != NULL) {
@@ -131,6 +131,8 @@
     fprintf(file, "}\n");
 
     //
+
+    mac->saved = true;
 
     fclose(file);
     free(full_path);
@@ -250,6 +252,9 @@
     
     // 
 
+    mac->name = name;
+    mac->saved = true;
+    
     fclose(file);
     return mac;
   }
