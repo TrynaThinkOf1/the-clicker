@@ -28,10 +28,10 @@ CFLAGS = -Wall -Wextra -std=$(VER) $(OPT) -I$(IDIR) -MMD
 all: $(BDIR) $(BINARY)
 
 $(BINARY): $(OBJS)
-	cc $(CFLAGS) $(GTKFLAGS) $(OBJS) -o $(BINARY) $(LIBS) $(GTKLIBS) $(OSFLAGS)
+	@cc $(CFLAGS) $(GTKFLAGS) $(OBJS) -o $(BINARY) $(LIBS) $(GTKLIBS) $(OSFLAGS)
 
 $(BDIR)/%.o: src/%.c
-	cc $(CFLAGS) $(GTKFLAGS) -c $< -o $@
+	@cc $(CFLAGS) $(GTKFLAGS) -c $< -o $@
 
 $(BDIR):
 	mkdir -p $(BDIR)
