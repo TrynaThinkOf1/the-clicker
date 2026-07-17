@@ -8,6 +8,7 @@
 #include <pthread.h>
 
 #include "builtins.h"
+#include "macros.h"
 
 /*
  * File to hold global variables that can be set
@@ -43,5 +44,13 @@ volatile bool click_timer_should_stop = false;
 
 pthread_t click_timer_thread;
 //
+
+// GLOBAL STATE FOR MACRO BOX
+GtkWidget* macro_name_entry;
+
+Macro* current_macro = NULL;
+
+int NEXT_Y_POSITION = 0; // so that I can build an orderly stack of macro actions
+// 
 
 #endif /* GLOBALS_H */

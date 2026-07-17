@@ -50,6 +50,8 @@ void addMacroStep(Macro* mac, void (*func)(int x, int y), int x, int y) {
     mac->last->next = part;
     mac->last = part;
   }
+
+  mac->saved = false;
 }
 
 
