@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/assets">
+    <file compressed="true">include/graphics/assets/plus_icon.png</file>
+  </gresource>
+  <gresource prefix="/assets">
+    <file compressed="true">include/graphics/assets/import_icon.png</file>
+  </gresource>
+</gresources>

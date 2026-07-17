@@ -23,24 +23,48 @@ IDIR = ./include
 LIBS = -lpthread
 OPT = -O1
 VER = c17
-CFLAGS = -Wall -Wextra -std=$(VER) $(OPT) -I$(IDIR) -MMD
+CFLAGS = -Wall -Wextra -std=$(VER) $(OPT) -I$(IDIR) -I$(BDIR) -MMD
+
+# GResource setup
+GLIB_COMPILE_RESOURCES = glib-compile-resources
+RESOURCE_XML = resources.gresource.xml
+RESOURCE_C = $(BDIR)/resources.c
+RESOURCE_H = $(BDIR)/resources.h
+RESOURCE_O = $(BDIR)/resources.o
+
+# files referenced inside the .gresource.xml (e.g. the png), so
+# rebuild resources.c/.h whenever the actual asset changes too.
+RESOURCE_DEPS = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=. --generate-dependencies $(RESOURCE_XML))
 
 all: $(BDIR) $(BINARY)
 
-$(BINARY): $(OBJS)
-	@cc $(CFLAGS) $(GTKFLAGS) $(OBJS) -o $(BINARY) $(LIBS) $(GTKLIBS) $(OSFLAGS)
+$(BINARY): $(OBJS) $(RESOURCE_O)
+	@cc $(CFLAGS) $(GTKFLAGS) $(OBJS) $(RESOURCE_O) -o $(BINARY) $(LIBS) $(GTKLIBS) $(OSFLAGS)
+
+# every normal object depends on resources.h existing first,
+# since source includes "resources.h".
+$(OBJS): $(RESOURCE_H)
 
 $(BDIR)/%.o: src/%.c
 	@cc $(CFLAGS) $(GTKFLAGS) -c $< -o $@
+
+$(RESOURCE_C): $(RESOURCE_XML) $(RESOURCE_DEPS) | $(BDIR)
+	$(GLIB_COMPILE_RESOURCES) --sourcedir=. --generate-source --target=$@ $(RESOURCE_XML)
+
+$(RESOURCE_H): $(RESOURCE_XML) $(RESOURCE_DEPS) | $(BDIR)
+	$(GLIB_COMPILE_RESOURCES) --sourcedir=. --generate-header --target=$@ $(RESOURCE_XML)
+
+$(RESOURCE_O): $(RESOURCE_C) $(RESOURCE_H)
+	@cc $(CFLAGS) $(GTKFLAGS) -c $(RESOURCE_C) -o $@
 
 $(BDIR):
 	mkdir -p $(BDIR)
 
 
-.PHONY: clean
+.PHONY: clean all
 
 clean:
 	rm -rf build/
-	rm $(BINARY)
+	rm -f $(BINARY)
 
 -include $(patsubst $(BDIR)/%.o, $(BDIR)/%.d, $(OBJS))
