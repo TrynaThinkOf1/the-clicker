@@ -18,8 +18,6 @@
 
 
 static void* clickTimerLoop(void* data) {
-  g_print("{\n\tSLEEP_MS: %i\n\tCLICK_X: %i\n\tCLICK_Y: %i\n\tCLICK_FUNC: %p\n}\n", SLEEP_MS, CLICK_X, CLICK_Y, CLICK_FUNC);
-
   while (!click_timer_should_stop) {
     sleep_m(SLEEP_MS, 0);
     if (click_timer_should_stop) break;
