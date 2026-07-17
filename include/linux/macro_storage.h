@@ -24,7 +24,7 @@
 
   bool nameExists(const char* name);
 
-  bool exportMacro(const Macro* mac);
+  bool exportMacro(Macro* mac);
 
   Macro* importMacro(char* name);
 
