@@ -6,7 +6,7 @@
 #include "graphics/callbacks/importGlobalMacro.h"
 
 
-static void interface_createImportCreateButtons(GtkWidget* grid) {
+static void interface_createImportCreateButtons(GtkWidget* grid, GtkWidget* macro_grid) {
   // create the button
   GtkWidget* create_button = gtk_button_new();
   GtkWidget* import_button = gtk_button_new();
@@ -21,7 +21,7 @@ static void interface_createImportCreateButtons(GtkWidget* grid) {
 
   // create the signal handlers for when input is added
   //g_signal_connect(create_button, "clicked", G_CALLBACK(callback_createGlobalMacro), NULL);
-  g_signal_connect(import_button, "clicked", G_CALLBACK(callback_importGlobalMacro), NULL);
+  g_signal_connect(import_button, "clicked", G_CALLBACK(callback_importGlobalMacro), macro_grid);
   //
 
   // add tooltips

@@ -58,15 +58,17 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
    // grid for storing elements
   GtkWidget* macro_box_grid = gtk_grid_new();
+  GtkWidget* macro_box_macro_grid = gtk_grid_new();
 
   interface_createNameEntry(macro_box_grid);
-  interface_createImportCreateButtons(macro_box_grid);
+  interface_createImportCreateButtons(macro_box_grid, macro_box_macro_grid);
   
    // styling
   gtk_widget_add_css_class(macro_box, "macro-box"); // add a class to style the click timer box
   gtk_widget_set_overflow(macro_box, GTK_OVERFLOW_HIDDEN); // prevent corner clipping, hard to explain
 
   gtk_box_append(GTK_BOX(macro_box), macro_box_grid);
+  gtk_box_append(GTK_BOX(macro_box), macro_box_macro_grid);
   // 
 
   gtk_box_append(GTK_BOX(root_box), click_timer_box);

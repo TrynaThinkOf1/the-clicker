@@ -8,6 +8,8 @@
 /* VERY TEMPORARY - FOR TESTING PURPOSES */
 #include "linux/macro_storage.h"
 /*  */
+#include "graphics/callbacks/renderMacro.h"
+#include "renderMacro.h"
 
 static void callback_importGlobalMacro(GtkWidget* widget, gpointer user_data) {
   char* macro_name = gtk_entry_buffer_get_text(gtk_entry_get_buffer(macro_name_entry)); // get content from global buffer
@@ -22,6 +24,7 @@ static void callback_importGlobalMacro(GtkWidget* widget, gpointer user_data) {
     current_macro = importMacro(macro_name);
     if (current_macro != NULL) {
       // TODO: Render it, etc.
+      renderGlobalMacro(GTK_WIDGET(user_data));
       g_print("Name: %s | Saved: %b | First: %p | Last: %p\n", current_macro->name, current_macro->saved, current_macro->first, current_macro->last);
     }
   }
