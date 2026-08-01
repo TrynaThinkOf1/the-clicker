@@ -3,3 +3,11 @@ build/*
 clicker
 clicker.app
 clicker.exe
+
+clicker.dSYM
+
+.DS_Store
+.cache
+__pycache__
+
+compile_commands.json

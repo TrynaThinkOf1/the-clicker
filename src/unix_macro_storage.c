@@ -86,7 +86,7 @@
    * 
    */
 
-  bool exportMacro(const Macro* mac) {
+  bool exportMacro(Macro* mac) {
     if (mac->first == NULL) return false;
 
     if (nameExists(mac->name)) return false;
@@ -139,7 +139,7 @@
     return true;
   }
 
-  Macro* importMacro(const char* name) {
+  Macro* importMacro(char* name) {
     if (!nameExists(name)) return NULL;
     printf("Name `%s` existed.\n", name);
 

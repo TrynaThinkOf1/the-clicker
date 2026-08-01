@@ -27,6 +27,9 @@ CFLAGS = -Wall -Wextra -std=$(VER) $(OPT) -I$(IDIR) -MMD
 
 all: $(BDIR) $(BINARY)
 
+compile_commands.json:
+	compiledb make -n
+
 $(BINARY): $(OBJS)
 	@cc $(CFLAGS) $(GTKFLAGS) $(OBJS) -o $(BINARY) $(LIBS) $(GTKLIBS) $(OSFLAGS)
 

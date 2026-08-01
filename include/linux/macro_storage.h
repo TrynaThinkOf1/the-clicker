@@ -17,14 +17,14 @@
   #include "parse_int.h"
 
   #define MACRO_STORAGE "/.clicker_macros/"
-  
+
 
   bool directoryExists(const char* dir);
   bool createDirectory(const char* dir);
 
   bool nameExists(const char* name);
 
-  bool exportMacro(const Macro* mac);
+  bool exportMacro(Macro* mac);
 
   Macro* importMacro(char* name);
 
