@@ -16,6 +16,14 @@
   #include <windows.h>
 #endif
 
+#include <string.h>
+#include <stdbool.h>
+
+char* getFuncName(void (*func)(int x, int y));
+
+void (*getNameFunc(const char* name))(int x, int y);
+
+//
 
 extern void moveCursor(int x, int y);
 
