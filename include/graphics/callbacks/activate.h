@@ -45,6 +45,9 @@ static void activate(GtkApplication* app, gpointer user_data) {
   // about dialoge
    // TODO: Implement
   //
+  // error notifications
+   // TODO: Implement
+  // 
 
   gtk_window_present(GTK_WINDOW(window));
 }
