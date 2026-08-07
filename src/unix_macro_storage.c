@@ -32,12 +32,7 @@
     return true;
   }
 
-  void deleteFile(const char* abs_name) {
-    remove(abs_name);
-  }
-
   //
-
 
   bool exportMacro(Macro* mac, char** error) {
     const char* names[] = {getHomeDir(), STORAGE_DIR, mac->name};
@@ -107,6 +102,11 @@
   }
 
   void deleteMacro(Macro* mac) {
+    const char* names[] = {getHomeDir(), STORAGE_DIR, mac->name};
+    int size = strlen(names[0]) + strlen(names[1]) + strlen(names[2]) + 3; // +2 for the '/' and +1 for the NUL
+    char absolute[size];
+    if (!createAbsName(names, 3, absolute, size)) return; // macro doesn't exist, no need for deletion
+    else remove(absolute);
     mac->saved = false;
   }
 

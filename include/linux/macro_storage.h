@@ -43,8 +43,6 @@
    */
   bool createAbsName(const char** names, int len, char* restrict absolute, int abs_len);
 
-  void deleteFile(const char* abs_name);
-
   //
 
   bool exportMacro(Macro* mac, char** error);
