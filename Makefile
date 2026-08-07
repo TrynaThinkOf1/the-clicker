@@ -25,6 +25,11 @@ OPT = -O1
 VER = c17
 CFLAGS = -Wall -Wextra -std=$(VER) $(OPT) -I$(IDIR) -MMD
 
+ifeq ($(debug),1)
+  CFLAGS += -g
+endif
+
+
 all: $(BDIR) $(BINARY)
 
 compile_commands.json:
