@@ -38,15 +38,12 @@ void addMacroStep(Macro* mac, void (*func)(int x, int y), int x, int y) {
   part->func = func;
   part->x = x;
   part->y = y;
+  part->next = NULL;
 
   if (mac->first == NULL) {
-    part->next = part;
-
     mac->first = part;
     mac->last = part;
   } else {
-    part->next = NULL;
-
     mac->last->next = part;
     mac->last = part;
   }
