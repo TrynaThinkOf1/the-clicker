@@ -14,6 +14,9 @@
   #include "macros.h"
   #include "builtins.h"
 
+  #define STORAGE_DIR ".clicker_macros"
+  
+
   char* getHomeDir();
 
   /*
@@ -31,26 +34,25 @@
    * Example:
    *   char* names[3] = {"root", "directory", "file.txt"};
    *
-   *   int size = 0;
-   *   for (int i = 0; i < 3; i++) size += strlen(names[i]);
+   *   int size = 0; // calculate size including '/' and NUL
    *
    *   char abs[size + 3]; // the size of all the names and all the '/'
    *   createAbsName(names, 3, abs, size + 3); // "root/directory/file.txt" (technically bool true/false)
    *
    * @contract: absolute is calculated to be wide enough
    */
-  bool createAbsName(char** names, int len, char* restrict absolute, int abs_len);
+  bool createAbsName(const char** names, int len, char* restrict absolute, int abs_len);
 
   void deleteFile(const char* abs_name);
 
   //
 
-  bool exportMacro(Macro* mac, char* error);
+  bool exportMacro(Macro* mac, char** error);
 
   /*
    * Frees `op_mac` on error
    */
-  bool importMacro(const char* name, Macro* op_mac, char* error);
+  bool importMacro(const char* name, Macro* op_mac, char** error);
 
   void deleteMacro(Macro* mac);
 

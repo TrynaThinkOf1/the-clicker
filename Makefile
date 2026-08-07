@@ -21,12 +21,13 @@ GTKLIBS = $(shell pkg-config --libs gtk4)
 
 IDIR = ./include
 LIBS = -lpthread
-OPT = -O1
 VER = c17
-CFLAGS = -Wall -Wextra -std=$(VER) $(OPT) -I$(IDIR) -MMD
+CFLAGS = -Wall -Wextra -std=$(VER) -I$(IDIR) -MMD
 
 ifeq ($(debug),1)
-  CFLAGS += -g
+  CFLAGS += -g -O0
+else
+	CFLAGS += -O1
 endif
 
 
