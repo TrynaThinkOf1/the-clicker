@@ -25,7 +25,7 @@ VER = c17
 CFLAGS = -Wall -Wextra -std=$(VER) -I$(IDIR) -MMD
 
 ifeq ($(debug),1)
-  CFLAGS += -g -O0
+  CFLAGS += -g -O0 -DDEBUG_TESTS
 else
 	CFLAGS += -O1
 endif
