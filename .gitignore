@@ -8,7 +8,9 @@ clicker.dSYM
 
 .DS_Store
 .cache
-__pycache__
 .vscode/
 
 compile_commands.json
+
+test.py
+__pycache__
