@@ -48,6 +48,8 @@ static void activate(GtkApplication* app, gpointer user_data) {
   // error notifications
    // TODO: Implement
   // 
+  // 
+  // FIXME hello
 
   gtk_window_present(GTK_WINDOW(window));
 }

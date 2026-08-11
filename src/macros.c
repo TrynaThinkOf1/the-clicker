@@ -47,6 +47,8 @@ void addMacroStep(Macro* mac, void (*func)(int x, int y), int x, int y) {
     mac->last->next = part;
     mac->last = part;
   }
+
+  mac->saved = false; // we just added a whole new step
 }
 
 
@@ -56,10 +58,8 @@ void removeMacroStep(Macro* mac, int offset) {
 
 void runMacro(const Macro* mac) {
   macro_part* part = mac->first;
-  while (part != mac->last) {
+  while (part != NULL) {
     part->func(part->x, part->y);
     part = part->next;
   }
-
-  part->func(part->x, part->y); // this is the last call
 }

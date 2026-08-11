@@ -10,12 +10,32 @@
   #include <sys/types.h>
   #include <stdbool.h>
   #include <string.h>
+  #include <regex.h> // woah.
 
   #include "macros.h"
   #include "builtins.h"
+  #include "debug_tests.h"
 
   #define STORAGE_DIR ".clicker_macros"
   
+  /* 
+  * Pattern explanation:
+  * \t       : Matches a literal tab character (C compiler converts \t to 0x09)
+  * (...)    : Group containing allowed command strings (alternation)
+  * \\(      : Matches a literal '(' (escaped for regex, so \\ in C string)
+  * -?       : Optional minus sign for negative numbers
+  * [0-9]+   : One or more digits
+  * ,        : Literal comma
+  * [ ]      : Literal space
+  * \\)      : Matches a literal ')'
+  * \n       : Matches a literal newline character (C compiler converts \n to 0x0A)
+  */
+  static const char* PATTERN = "\t(leftClick|rightClick|leftDoubleClick|rightDoubleClick|sleep_m|moveCursor)\\(-?[0-9]+, -?[0-9]+\\)\n";
+
+
+  bool regexMatch(const char* string, const char* pattern, char** error);
+
+  //
 
   char* getHomeDir();
 
@@ -48,10 +68,13 @@
   bool exportMacro(Macro* mac, char** error);
 
   /*
-   * Frees `op_mac` on error
+   * @contract: op_mac is NOT initialized, only a stack variable
    */
-  bool importMacro(const char* name, Macro* op_mac, char** error);
+  bool importMacro(const char* name, Macro** op_mac, char** error);
 
+  /*
+   * This does NOT free the macro
+   */
   void deleteMacro(Macro* mac);
 
 #endif

@@ -21,7 +21,7 @@
 
 char* getFuncName(void (*func)(int x, int y));
 
-void (*getNameFunc(const char* name))(int x, int y);
+void (*getNameFunc(const char* name))(int x, int y); // bottom 3 syntax moments EVER
 
 //
 
