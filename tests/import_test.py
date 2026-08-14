@@ -34,6 +34,7 @@ This test also requires that binary exist at the path `~/the-clicker/clicker` (`
 import subprocess
 import typing
 from pathlib import Path
+from os import remove
 
 
 def fprint(n: int, msg: str, scs: bool):
@@ -80,9 +81,30 @@ def verify(name: str, steps: dict[str, tuple[int, int]], n: int) -> bool:
   return True;
 
 
+#####
+#####
+
+TESTS: list[tuple[int, dict[str, tuple[int, int]]]] = [
+  (0, {
+    "leftClick": (-1, -1)
+  })
+]
+
+#####
+#####
+
 def main():
-  create("testingTest", {"leftClick": (2, 4)})
-  verify("testingTest", {"leftClick": (2, 4)}, 0)
+  scs, fail = 0, 0
+  for test in TESTS:
+    create("test", test[1])
+    if verify("test", test[1], test[0]):
+      scs += 1
+    else:
+      fail += 1
+    remove(Path.home() / ".clicker_macros" / "test")
+
+  print(f"\nIn total: {scs}/{fail} ({scs * 100 / (fail if fail > 0 else scs)}%)")
+    
 
 
 if __name__ == "__main__":
