@@ -31,81 +31,69 @@ still outputs properly and can be tested with this file. Otherwise, edit this te
 This test also requires that binary exist at the path `~/the-clicker/clicker` (`/Users/<name>/the-clicker/clicker`)
 """
 
-import subprocess
-import typing
+import standardized
 from pathlib import Path
 from os import remove
 
+# [===================== SEPARATOR =====================]
 
-def fprint(n: int, msg: str, scs: bool):
-  if not scs:
-    print(f"\033[0;31m[[ TEST #{n}  ->  {msg} ]]\033[0m")
-  else:
-    print(f"\033[0;32m[[ TEST #{n}  ->  SUCCESS ]]\033[0m")
-
-
-def create(name: str, steps: dict[str, tuple[int, int]]) -> None:
+def createTestFile(name: str, steps: dict[str, tuple[int, int]]) -> None:
   with open(Path.home() / ".clicker_macros" / name, "w") as file:
     file.write(f"\"{name}\": {{ \n")
 
     for func, (x, y) in steps.items():
-      file.write(f"\t{name}({x}, {y})\n")
+      file.write(f"\t{func}({x}, {y})\n")
 
     file.write("}\n")
 
+# [===================== SEPARATOR =====================]
 
-def verify(name: str, steps: dict[str, tuple[int, int]], n: int) -> bool:
-  result = subprocess.run([Path.home() / "the-clicker" / "clicker", name], stdout=subprocess.PIPE)
-  if result.returncode != 0:
-    raise Exception(f"clicker returned error code {result.returncode}")
+class Test:
+  def __init__(self, steps: dict[str, tuple[int, int]], desired: list[str], modifier):
+    self.steps = steps
+    self.desired = ["name: test"] + [modifier(val) for val in desired]
 
-  op: str = result.stdout.decode()
+# [===================== SEPARATOR =====================]
 
-  if op.startswith("error: "):
-    fprint(n, '"' + op[:len(op) - 1] + '"', False)
-    return False
-  
-  for line, (func, (x, y)) in zip(op.splitlines(), steps.items()):
-    if line.startswith("name: "):
-      if line[6:] != name:
-        fprint(n, "NAME FAILED TO COPY", False)
-        return False
-      else:
-        continue
-
-    if line != f"{{{{\t{func}({x}, {y})\t}}}}":
-      fprint(n, f"line \"{line}\" != \"{{{{\t{func}({x}, {y})\t}}}}\"", False)
-      return False
-
-  fprint(n, "", True)
-  return True;
-
-
-#####
-#####
-
-TESTS: list[tuple[int, dict[str, tuple[int, int]]]] = [
-  (0, {
-    "leftClick": (-1, -1)
-  })
+TESTS: list[Test] = [
+  Test(
+    {
+      "leftClick": (-1, -1),
+      "moveCursor": (4, 5),
+      "rightClick": (800, 250),
+      "sleep_m": (500, 0),
+      "rightDoubleClick": (-1, -1)
+    }, [
+      "leftClick(-1, -1)",
+      "moveCursor(4, 5)",
+      "rightClick(800, 250)",
+      "sleep_m(500, 0)",
+      "rightDoubleClick(-1, -1)"
+    ],
+    lambda s : f"{{{{\t{s}\t}}}}"
+  ),
+  Test(
+    {
+      "fakeFunc": (400, 200),
+      "sleep_m": (1000, 0),
+      "moveCursor": (2000, 1800),
+      "rightClick": (-2, -400)
+    },
+    [
+      "sleep_m(1000, 0)",
+      "moveCursor(2000, 1800)",
+    ],
+    lambda s : f"{{{{\t{s}\t}}}}"
+  )
 ]
 
-#####
-#####
-
 def main():
-  scs, fail = 0, 0
   for test in TESTS:
-    create("test", test[1])
-    if verify("test", test[1], test[0]):
-      scs += 1
-    else:
-      fail += 1
+    createTestFile("test", test.steps)
+    standardized.fullTest([Path.home() / "the-clicker" / "clicker", "test"], test.desired)
     remove(Path.home() / ".clicker_macros" / "test")
 
-  print(f"\nIn total: {scs}/{fail} ({scs * 100 / (fail if fail > 0 else scs)}%)")
-    
-
+# [===================== SEPARATOR =====================]
 
 if __name__ == "__main__":
   main()
