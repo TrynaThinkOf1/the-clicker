@@ -20,17 +20,16 @@
   
   /* 
   * Pattern explanation:
-  * \t       : Matches a literal tab character (C compiler converts \t to 0x09)
-  * (...)    : Group containing allowed command strings (alternation)
-  * \\(      : Matches a literal '(' (escaped for regex, so \\ in C string)
-  * -?       : Optional minus sign for negative numbers
-  * [0-9]+   : One or more digits
-  * ,        : Literal comma
-  * [ ]      : Literal space
-  * \\)      : Matches a literal ')'
-  * \n       : Matches a literal newline character (C compiler converts \n to 0x0A)
+  * \t          : Matches a literal tab character (C compiler converts \t to 0x09)
+  * (...)       : Group containing allowed command strings (alternation)
+  * \\(         : Matches a literal '(' (escaped for regex, so \\ in C string)
+  * (-1|[0-9]+) : Any number [-1, +inf)
+  * ,           : Literal comma
+  * [ ]         : Literal space
+  * \\)         : Matches a literal ')'
+  * \n          : Matches a literal newline character (C compiler converts \n to 0x0A)
   */
-  static const char* PATTERN = "\t(leftClick|rightClick|leftDoubleClick|rightDoubleClick|sleep_m|moveCursor)\\(-?[0-9]+, -?[0-9]+\\)\n";
+  static const char* PATTERN = "\t(leftClick|rightClick|leftDoubleClick|rightDoubleClick|sleep_m|moveCursor)\\((-1|[0-9]+), (-1|[0-9]+)\\)\n";
 
 
   bool regexMatch(const char* string, const char* pattern, char** error);
