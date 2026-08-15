@@ -54,6 +54,8 @@
   //
 
   bool exportMacro(Macro* mac, char** error) {
+    CLICKER_ASSERT(mac->name == NULL, "mac->name == NULL");
+    
     const char* names[] = {getHomeDir(), STORAGE_DIR, mac->name};
     int size = strlen(names[0]) + strlen(names[1]) + 2; // +1 for the '/' and +1 for the NUL
     char directory[size];
@@ -111,6 +113,8 @@
 
     fprintf(fp, "}\n");
     fclose(fp);
+
+    CLICKER_ASSERT(filepathExists(absolute), "Macro file was not created")
 
     mac->saved = true;
     return true;

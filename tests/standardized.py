@@ -27,7 +27,7 @@ Test a command
 TODO: Account for missing lines in the middle
 """
 def fullTest(command: list[str], desired: list[str]) -> None:
-  formatPrintList(["\nRUNNING TEST"], [BLUE])
+  formatPrintList(["RUNNING TEST"], [BLUE])
   
   result = subprocess.run(command, stdout=subprocess.PIPE)
   outputs = result.stdout.decode().splitlines()
