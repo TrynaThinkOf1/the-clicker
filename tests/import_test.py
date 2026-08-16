@@ -1,7 +1,7 @@
 """
 August 11, 2026.
 
-This test requires a specific version of main.py such that the program only does the following:
+This test requires a specific version of main.c such that the program only does the following:
   ```c
     if (argc < 2) return 1;
 
@@ -9,6 +9,7 @@ This test requires a specific version of main.py such that the program only does
     Macro* mac;
     if (!importMacro(argv[1], &mac, &error)) {
       printf("error: %s\n", error);
+      freeMacro(mac);
       return 1;
     }
 
@@ -86,7 +87,7 @@ TESTS: list[Test] = [
     ],
     lambda s : f"{{{{\t{s}\t}}}}"
   ),
-  Test("BAD BACRO : ALL NAME ERRORS : NO NUMBER ERRORS : NO FORMAT ERRORS",
+  Test("BAD MACRO : ALL NAME ERRORS : NO NUMBER ERRORS : NO FORMAT ERRORS",
     {
       "fakeFunc": (0, 0),
       "badFunc": (-1, -1),

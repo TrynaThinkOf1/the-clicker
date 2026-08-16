@@ -22,9 +22,18 @@ def formatPrintList(msgs: list[str], colors: list[str]) -> None:
 # [===================== SEPARATOR =====================]
 
 """
-Test a command
+Test read a file
+"""
+def fullTestFile(abs_path: str, desired: list[str]):
+  with open(abs_path, "r") as file:
+    buffer = file.read()
 
-TODO: Account for missing lines in the middle
+  fullTest(["echo", buffer], desired + [""])
+
+# [===================== SEPARATOR =====================]
+
+"""
+Test a command
 """
 def fullTest(command: list[str], desired: list[str]) -> None:
   formatPrintList(["RUNNING TEST"], [BLUE])
@@ -38,7 +47,7 @@ def fullTest(command: list[str], desired: list[str]) -> None:
     scs = False
     seen: list[str] = []
     
-    formatPrintList(["[[ LESS OUTPUT THAN EXPECTED, ", (str(-diff) + " EXTRA LINES") if ((diff := len(desired) - len(outputs)) < 0) else (str(diff) + " LINES MISSING"), "]]"], [YELLOW, YELLOW, YELLOW])
+    formatPrintList(["[[ DIFF OUTPUT THAN EXPECTED, ", (str(-diff) + " EXTRA LINES") if ((diff := len(desired) - len(outputs)) < 0) else (str(diff) + " LINES MISSING"), "]]"], [YELLOW, YELLOW, YELLOW])
     # because we dont have a direct-direct match, we have to check every output line against every desired line
     for op_line in outputs:
       if op_line not in desired:
