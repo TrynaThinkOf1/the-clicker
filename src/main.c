@@ -50,5 +50,5 @@ int main(int argc, char** argv) {
 
   destroyMouse(); // same as the initializer function above
   
-  return EXIT_SUCCESS;
+  return status;
 }
