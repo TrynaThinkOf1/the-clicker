@@ -32,7 +32,7 @@
 int main(int argc, char** argv) {
   if (!initializeMouse()) { // this is only necessary for linux, but macos has a dummy version for API uniformity
     printf("Failed to initialize mouse!\n");
-    return 1;
+    return EXIT_FAILURE;
   }
 
   //
@@ -50,5 +50,5 @@ int main(int argc, char** argv) {
 
   destroyMouse(); // same as the initializer function above
   
-  return status;
+  return EXIT_SUCCESS;
 }
