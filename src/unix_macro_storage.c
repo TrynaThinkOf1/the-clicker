@@ -1,271 +1,222 @@
 #include "linux/macro_storage.h"
+#include "macros.h"
+#include <stdio.h>
 
 #if defined(__APPLE__) || defined(__MACH__) || defined(__LINUX__) || defined(__unix__)
 
-  #include <stdlib.h>
-  #include <stdio.h>
-  #include <unistd.h>
-  #include <sys/stat.h>
-  #include <sys/types.h>
-  #include <pwd.h>
-  #include <string.h>
-  #include <stdbool.h>
-
-  #include "macros.h"
-  #include "builtins.h"
-  #include "parse_int.h"
-
-  /*
-  * Don't worry about all of the repeated calls to `getFullPath`, the compiler
-  * caches it in a register so it's not actually getting called 100 times
-  */
-
-  char* getFullPath(const char* dir, const char* name) {
-    uid_t uid = getuid(); // find the ID of the user
-    struct passwd* info = getpwuid(uid); // get the user's info NOT PASSWORD!!
-
-    char* full_path = malloc(strlen(info->pw_dir) + strlen(dir) + strlen(name) + 1);
-    if (!full_path) return NULL;
-
-  	strcpy(full_path, info->pw_dir);
-  	strcat(full_path, dir);
-  	strcat(full_path, name);
-
-  	return full_path;
+  bool regexMatch(const char* string, const char* pattern, char** error) {
+    int status;
+    regex_t re;
+    
+    if (regcomp(&re, pattern, REG_EXTENDED) != 0) {
+      *error = "Failed to initialize RegEx engine!";
+      return false;
+    }
+    
+    status = regexec(&re, string, 0, NULL, 0);
+    regfree(&re);
+    
+    *error = NULL;
+    return status == 0;
   }
 
+  //
 
-  bool directoryExists(const char* dir) {
-    char* full_path = getFullPath(dir, "");
-    if (full_path == NULL) return false;
+  char* getHomeDir() {
+    struct passwd* info = getpwuid(getuid()); // get the user's info NOT PASSWORD!!
+    return info->pw_dir;
+  }
 
+  bool filepathExists(const char* abs_name) {
     struct stat st = {0};
-    if (stat(full_path, &st) == -1) {
-      free(full_path);
-      return false;
+    return stat(abs_name, &st) != -1;
+  }
+
+  bool createDirectory(const char* abs_name) {
+    // these permissions are READ/WRITE/EXEC for all users and groups, kinda unsafe :/
+    return mkdir(abs_name, S_IRWXU | S_IRWXG | S_IRWXO) != -1;
+  }
+
+  bool createAbsName(const char** names, int len, char* restrict absolute, int abs_len) {
+    absolute[0] = '\0'; // super elusive garbage-init bug causes whole func to fail
+    size_t offset = 0;
+
+    for (int i = 0; i < len; i++) {
+      register int size = strlen(names[i]); // not actually recomputed, it gets cached
+      if (strlcat(absolute, names[i], abs_len) < size + offset ||
+        (i < len - 1 && strlcat(absolute, "/", abs_len) < size + offset + 1)) return false;
+      offset += size + 1; // + 1 for the '/'
     }
 
-    free(full_path);
     return true;
   }
 
-  bool createDirectory(const char *dir) {
-    char* full_path = getFullPath(dir, "");
-    if (full_path == NULL) return false;
+  //
 
-    // these permissions represent READ, WRITE, EXECUTE for users, groups, and others
-    if (mkdir(full_path, S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
-      free(full_path);
+  bool exportMacro(Macro* mac, char** error) {
+    CLICKER_ASSERT(mac->name == NULL, "mac->name == NULL");
+    
+    const char* names[] = {getHomeDir(), STORAGE_DIR, mac->name};
+    int size = strlen(names[0]) + strlen(names[1]) + 2; // +1 for the '/' and +1 for the NUL
+    char directory[size];
+    if (!createAbsName(names, 2, directory, size)) {
+      *error = "Filesystem Failure: Could not resolve directory path.";
       return false;
     }
 
-    free(full_path);
-    return true;
-  }
+    if (!filepathExists(directory)) {
+      if (!createDirectory(directory)) {
+        *error = "Filesystem Failure: Could not create storage directory.";
+        return false;
+      }
+    }
 
-
-  bool nameExists(const char* name) {
-    if (!directoryExists(MACRO_STORAGE)) return false;
-
-    //
-
-    char* full_path = getFullPath(MACRO_STORAGE, name);
-    if (full_path == NULL) return false;
-
-    struct stat st = {0};
-    if (stat(full_path, &st) == -1) {
-      free(full_path);
+    size += strlen(names[2]) + 1; // +1 for the next '/'
+    char absolute[size];
+    if (!createAbsName(names, 3, absolute, size)) {
+      *error = "Filesystem Failure: Could not resolve file path.";
       return false;
     }
 
-    free(full_path);
-    return true;
-  }
-
-  /*
-   * 
-   */
-
-  bool exportMacro(Macro* mac) {
-    if (mac->first == NULL) return false;
-
-    if (nameExists(mac->name)) return false;
-    if (!directoryExists(MACRO_STORAGE)) if (!createDirectory(MACRO_STORAGE)) return false;
-
-    char* full_path = getFullPath(MACRO_STORAGE, mac->name);
-    if (full_path == NULL) return false;
-
-    FILE* file = fopen(full_path, "w");
-    if (file == NULL) {
-      free(full_path);
+    if (filepathExists(absolute)) {
+      *error = "Macro already exists!";
       return false;
     }
 
     //
 
-    fprintf(file, "\"%s\": {\n", mac->name);
+    FILE* fp = fopen(absolute, "w");
+    if (fp == NULL) {
+      *error = "Failed to create macro storage file!";
+      return false;
+    }
 
-    macro_part* part = mac->first;
-    while (part != NULL) {
-      fprintf(file, "\t");
-      
-      if (part->func == moveCursor) {
-        fprintf(file, "moveCursor(");
-      } else if (part->func == leftClick) {
-        fprintf(file, "leftClick(");
-      } else if (part->func == rightClick) {
-        fprintf(file, "rightClick(");
-      } else if (part->func == leftDoubleClick) {
-        fprintf(file, "leftDoubleClick(");
-      } else if (part->func == rightDoubleClick) {
-        fprintf(file, "rightDoubleClick(");
-      } else if (part->func == sleep_m) {
-        fprintf(file, "sleep_m(");
+    fprintf(fp, "\"%s\": {\n", mac->name);
+
+    macro_part* p = mac->first;
+    if (p == NULL) {
+      *error = "Cannot save empty macro!";
+      return false;
+    }
+
+    while (p != NULL) {
+      char* name = getFuncName(p->func);
+      if (p == NULL) {
+        *error = "Invalid macro step!";
+        return false;
       }
 
-      fprintf(file, "%i, %i)\n", part->x, part->y);
+      fprintf(fp, "\t%s(%d, %d)\n", name, p->x, p->y);
 
-      part = part->next;
+      p = p->next;
     }
 
-    fprintf(file, "}\n");
+    fprintf(fp, "}\n");
+    fclose(fp);
 
-    //
+    CLICKER_ASSERT(filepathExists(absolute), "Macro file was not created")
 
     mac->saved = true;
-
-    fclose(file);
-    free(full_path);
     return true;
   }
 
-  Macro* importMacro(char* name) {
-    if (!nameExists(name)) return NULL;
-    printf("Name `%s` existed.\n", name);
-
-    char* full_path = getFullPath(MACRO_STORAGE, name);
-    if (full_path == NULL) return false;
-    printf("Full path `%s` created.\n", full_path);
-
-    FILE* file = fopen(full_path, "r");
-    free(full_path);
-    if (file == NULL) {
+  bool importMacro(const char* name, Macro** op_mac, char** error) {
+    const char* names[] = {getHomeDir(), STORAGE_DIR, name};
+    int size = strlen(names[0]) + strlen(names[1]) + 2; // +1 for the '/' and +1 for the NUL
+    char directory[size];
+    if (!createAbsName(names, 2, directory, size)) {
+      *error = "Filesystem Failure: Could not resolve directory path.";
       return false;
     }
-    printf("File opened successfully, file: `%p`.\n", file);
 
-    Macro* mac = initializeMacro();
-    if (mac == NULL) {
-      fclose(file);
+    if (!filepathExists(directory)) {
+      if (!createDirectory(directory)) {
+        *error = "Filesystem Failure: Could not create storage directory.";
+      } else {
+        *error = "Macro does not exist!"; // if the dir doesnt exist neither does the file
+      }
+
       return false;
     }
-    printf("Macro allocated successfully, mac: `%p`.\n", mac);
 
-    char buffer[100];
-    int ch, idx = 0;
-    while ((ch = getc(file)) != EOF) {
-      while (ch != '\n' && idx < 99) {
-        buffer[idx] = ch;
-        ch = getc(file);
-        idx++;
-      }
-      buffer[idx + 1] = '\0';
+    size += strlen(names[2]) + 1; // +1 for the next '/'
+    char absolute[size];
+    if (!createAbsName(names, 3, absolute, size)) {
+      *error = "Filesystem Failure: Could not resolve file path.";
+      return false;
+    }
 
-      int x = -2, y = -2;
+    if (!filepathExists(absolute)) {
+      *error = "Macro does not exist!";
+      return false;
+    }
 
-      // grab the x and y coordinate encoded
-      if (buffer[0] == '\t') {
-        int begindex = 0, endex;
-        
-        while (((buffer[begindex] < 48 || buffer[begindex] > 57) && buffer[begindex] != '-') && begindex < idx) begindex++;
-        if (begindex < idx) {
-          endex = begindex;
-          while ((buffer[endex] >= 48 && buffer[endex] <= 57 || buffer[endex] == '-') && endex < idx) endex++;
-          if (endex > begindex) {
-            printf("buffer: `%s`, begindex: %i, endex: %i\n", buffer, begindex, endex);
-            x = parse_int(&buffer[begindex], endex - begindex - (buffer[begindex] == '-' ? 2 : 1));
-            printf("x parsed successfully, x: %i.\n", x);
-          }
+    //
 
-          begindex = endex + 2;
-          endex = begindex;
-          if (begindex < idx) {
-            while ((buffer[endex] >= 48 && buffer[endex] <= 57 || buffer[endex] == '-') && endex < idx) endex++;
-            if (endex > begindex) {
-              printf("buffer: `%s`, begindex: %i, endex: %i\n", buffer, begindex, endex);
-              y = parse_int(&buffer[begindex], endex - begindex - (buffer[begindex] == '-' ? 2 : 1));
-              printf("y parsed successfully, y: %i.\n", y);
-            }
-          }
-        }
-      }
+    FILE* fp = fopen(absolute, "r");
+    if (fp == NULL) {
+      *error = "Failed to read macro storage file!";
+      return false;
+    }
 
-      // parse the function name
-      if (x >= -1 && y >= -1) {
-        macro_part* part = malloc(sizeof(*part));
-        part->x = x;
-        part->y = y;
-        part->func = NULL; // placeholder
-        part->next = NULL;
-        
-        int endex = 1;
-        while (buffer[endex] != '(' && endex < idx) endex++;
-        char* name = malloc(endex);
-        if (name == NULL) continue;
-        strlcpy(name, buffer + 1, endex);
-        printf("Name: `%s`.\n", name);
-
-        if (strcmp(name, "moveCursor") == 0) {
-          part->func = moveCursor;
-        } else if (strcmp(name, "leftClick") == 0) {
-          part->func = leftClick;
-        } else if (strcmp(name, "rightClick") == 0) {
-          part->func = rightClick;
-        } else if (strcmp(name, "leftDoubleClick") == 0) {
-          part->func = leftDoubleClick;
-        } else if (strcmp(name, "rightDoubleClick") == 0) {
-          part->func = rightDoubleClick;
-        } else if (strcmp(name, "sleep_m") == 0) {
-          part->func = sleep_m;
-        }
-
-        if (part->func != NULL) {
-          if (mac->first == NULL) {
-            mac->first = part;
-            mac->last = part;
-            part->next = part;
-          } else {
-            mac->last->next = part;
-            mac->last = part;
-          }
-
-          printf("Name parsed successfully, name: `%s`.\n", name);
-          printf("\npart: {\n\tx: %i\n\ty: %i\n\n\tfunc: %p\n\tnext: %p\n}\n\n", x, y, part->func, part->next);
-        }
-
-        free(name);
-      }
-      
-      memset(buffer, 0, 100);
-      idx = 0;
-    } 
+    *op_mac = initializeMacro();
+    Macro* mac = *op_mac;
     
-    // 
-
-    mac->name = name;
+    register size_t s = (strlen(name) + 1) * sizeof(char);
+    char* copied_name = malloc(s);
+    if (copied_name == NULL || strlcpy(copied_name, name, s) < s - 1 || mac == NULL) {
+      *error = "Failed to allocate macro!";
+      return false;
+    }
+    mac->name = copied_name;
     mac->saved = true;
-    
-    fclose(file);
-    return mac;
+
+    char* regerr = NULL;
+    char* line = NULL;
+    size_t len;
+    ssize_t read;
+    while ((read = getline(&line, &len, fp)) != -1) {
+      if (!regexMatch(line, PATTERN, &regerr)) {
+        if (regerr != NULL) {
+          *error = regerr;
+          return false;
+        }
+        continue;
+      }
+
+      // if it passed regex that means it must have proper format and naming, therefore sscanf() can be used
+
+      char func_name[17] = {0}; // longest possible name is rightDoubleClick @ 16 chars
+      int x, y;
+      /*
+       * leading space = skip any leading whitespace ( , \t, \n, \r)
+       * the %16[^(] means it will read in either 16 characters or until it hits the '('
+       * %d, %d are the x and y of the line
+       */
+      if (sscanf(line, " %16[^(](%d, %d)", func_name, &x, &y) != 3) continue; // just skip the line
+
+      void (*func)(int x, int y) = getNameFunc(func_name);
+      if (func == NULL) continue; // skip - fluke?
+
+      CLICKER_ASSERT(mac == NULL, "On import : op_mac = NULL");
+      
+      addMacroStep(mac, func, x, y);
+
+      CLICKER_ASSERT(mac->first == NULL, "On import : op_mac->first = NULL");
+      CLICKER_ASSERT(mac->last == NULL, "On import : op_mac->last = NULL");
+    }
+
+    return true;
   }
 
-  void deleteMacro(const char* name) {
-    char* full_path = getFullPath(MACRO_STORAGE, name);
-    if (full_path == NULL) return;
+  void deleteMacro(Macro* mac) {
+    const char* names[] = {getHomeDir(), STORAGE_DIR, mac->name};
+    int size = strlen(names[0]) + strlen(names[1]) + strlen(names[2]) + 3; // +2 for the '/' and +1 for the NUL
+    char absolute[size];
+    if (!createAbsName(names, 3, absolute, size)) return; // macro doesn't exist, no need for deletion
+    else remove(absolute);
 
-    remove(full_path);
-
-    free(full_path);
+    mac->saved = false;
   }
 
 #endif

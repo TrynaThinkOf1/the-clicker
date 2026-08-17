@@ -1,6 +1,29 @@
 #include "builtins.h"
 
-#include <stdbool.h>
+
+char* getFuncName(void (*func)(int x, int y)) {
+  if (func == moveCursor) return (char*)"moveCursor";
+  else if (func == leftClick) return (char*)"leftClick";
+  else if (func == rightClick) return (char*)"rightClick";
+  else if (func == leftDoubleClick) return (char*)"leftDoubleClick";
+  else if (func == rightDoubleClick) return (char*)"rightDoubleClick";
+  else if (func == sleep_m) return (char*)"sleep_m";
+
+  return NULL;
+}
+
+void (*getNameFunc(const char* name))(int x, int y) {
+  if (strcmp(name, "moveCursor") == 0) return moveCursor;
+  else if (strcmp(name, "leftClick") == 0) return leftClick;
+  else if (strcmp(name, "rightClick") == 0) return rightClick;
+  else if (strcmp(name, "leftDoubleClick") == 0) return leftDoubleClick;
+  else if (strcmp(name, "rightDoubleClick") == 0) return rightDoubleClick;
+  else if (strcmp(name, "sleep_m") == 0) return sleep_m;
+
+  return NULL;
+}
+
+//
 
 void leftClick(int x, int y) {
   if (x >= 0 && y >= 0) moveCursor(x, y);
