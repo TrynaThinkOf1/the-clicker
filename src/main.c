@@ -26,7 +26,7 @@
 #include "parse_int.h"
 #include "builtins.h"
 #include "macros.h"
-#include "graphics/callbacks/activate.h"
+#include "graphics/activate.h"
 
 
 int main(int argc, char** argv) {
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 
   //
 
-  GtkApplication *app;
+  GtkApplication* app;
   int status;
 
   app = gtk_application_new("trynathinkof1.the-clicker", G_APPLICATION_DEFAULT_FLAGS);
