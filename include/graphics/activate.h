@@ -4,29 +4,13 @@
 #include <gtk/gtk.h>
 
 #include "graphics/state.h"
-#include "gtk/gtkshortcut.h"
+#include "graphics/callbacks/numberOnlyEntry.h"
 
 static void activate(GtkApplication* app, gpointer user_data) {
   // GtkWidget* main_window;
 
   // main_window = gtk_application_window_new(app);
   // gtk_window_set_title(GTK_WINDOW(main_window), "The Clicker");
-
-  /*
-   * Set up the click timer.
-   * [HOURS ENTRY] [MINS ENTRY] [SECS ENTRY]
-   * [X ENTRY][Y ENTRY][CLICK TYPE DROPDOWN]
-   * [          START/STOP BUTTON          ]
-   * Relies on a global state struct for everything
-   */
-  ClickTimerState* CT_STATE = g_new0(ClickTimerState, 1); // deliberatly leaked, actual pattern for GTK+
-
-  /*GtkBuilder *builder = gtk_builder_new_from_resource("/com/the-clicker/graphics/ui/click_timer.ui");
-  GtkWidget *grid = GTK_WIDGET(gtk_builder_get_object(builder, "main_grid"));
-  CT_STATE->mins_spinbtn = GTK_WIDGET(gtk_builder_get_object(builder, "mins_entry"));
-  CT_STATE->secs_spinbtn = GTK_WIDGET(gtk_builder_get_object(builder, "secs_entry"));
-  CT_STATE->ms_spinbtn = GTK_WIDGET(gtk_builder_get_object(builder, "ms_entry"));
-  CT_STATE->start_stop_button = GTK_WIDGET(gtk_builder_get_object(builder, "start_stop_button"));*/
 
   /*
    * GtkCssProvider *provider = gtk_css_provider_new();
@@ -38,14 +22,36 @@ static void activate(GtkApplication* app, gpointer user_data) {
    g_object_unref(provider);
    */
 
+  /* MAIN WINDOW */
   GtkBuilder* main_window_builder = gtk_builder_new_from_resource("/com/the-clicker/graphics/ui/main_window.ui");
   GtkApplicationWindow* window = GTK_APPLICATION_WINDOW(gtk_builder_get_object(main_window_builder, "main_window"));
   gtk_window_set_application(GTK_WINDOW(window), app);
+  /* */
 
+  /* CLICK TIMER
+   *
+   * [HOURS ENTRY] [MINS ENTRY] [SECS ENTRY]
+   * [X ENTRY][Y ENTRY][CLICK TYPE DROPDOWN]
+   * [          START/STOP BUTTON          ]
+   * Relies on a global state struct for everything
+   */
   GtkBuilder* click_timer_builder = gtk_builder_new_from_resource("/com/the-clicker/graphics/ui/click_timer.ui");
+  ClickTimerState* CT_STATE = g_new0(ClickTimerState, 1); // deliberatly leaked, actual pattern for GTK+
+
   GtkWidget* click_timer_grid = GTK_WIDGET(gtk_builder_get_object(click_timer_builder, "click_timer_grid"));
 
+  CT_STATE->mins_spinbtn = GTK_WIDGET(gtk_builder_get_object(click_timer_builder, "mins_spinbtn"));
+  CT_STATE->secs_spinbtn = GTK_WIDGET(gtk_builder_get_object(click_timer_builder, "secs_spinbtn"));
+  CT_STATE->ms_spinbtn = GTK_WIDGET(gtk_builder_get_object(click_timer_builder, "ms_spinbtn"));
+  
+  CT_STATE->x_coord_entry = GTK_WIDGET(gtk_builder_get_object(click_timer_builder, "x_coord_entry"));
+  CT_STATE->y_coord_entry = GTK_WIDGET(gtk_builder_get_object(click_timer_builder, "y_coord_entry"));
+
+  g_signal_connect(gtk_editable_get_delegate(GTK_EDITABLE(CT_STATE->x_coord_entry)), "insert-text", G_CALLBACK(numberOnlyEntry), NULL);
+  g_signal_connect(gtk_editable_get_delegate(GTK_EDITABLE(CT_STATE->y_coord_entry)), "insert-text", G_CALLBACK(numberOnlyEntry), NULL);
+
   gtk_window_set_child(GTK_WINDOW(window), GTK_GRID(click_timer_grid));
+  /*  */
   
   gtk_window_present(GTK_WINDOW(window));
   
