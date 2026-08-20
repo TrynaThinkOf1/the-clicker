@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+
+  <object class="GtkGrid" id="click_timer_grid">
+    <property name="row-spacing">8</property>
+    <property name="column-spacing">8</property>
+
+    <child>
+      <object class="GtkSpinButton" id="mins_spinbtn">
+        <property name="adjustment">
+          <object class="GtkAdjustment">
+            <property name="lower">0</property>
+            <property name="upper">120</property>
+            <property name="step-increment">1</property>
+          </object>
+        </property>
+        <property name="numeric">True</property>
+        <property name="width-chars">5</property>
+        <property name="tooltip-text">Minutes to wait before executing the click.</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkSpinButton" id="secs_spinbtn">
+        <property name="adjustment">
+          <object class="GtkAdjustment">
+            <property name="lower">0</property>
+            <property name="upper">59</property>
+            <property name="step-increment">1</property>
+          </object>
+        </property>
+        <property name="numeric">True</property>
+        <property name="width-chars">5</property>
+        <property name="tooltip-text">Seconds to wait, from 0 to 59. Roll over to minutes manually.</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkSpinButton" id="ms_spinbtn">
+        <property name="adjustment">
+          <object class="GtkAdjustment">
+            <property name="lower">0</property>
+            <property name="upper">999</property>
+            <property name="step-increment">1</property>
+          </object>
+        </property>
+        <property name="numeric">True</property>
+        <property name="width-chars">5</property>
+        <property name="tooltip-text">Milliseconds to wait, from 0 to 999.</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkEntry" id="x_coord_entry">
+        <property name="max-length">5</property>
+        <property name="tooltip-text">X coordinate of the screen position where the click will be executed.</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkEntry" id="y_coord_entry">
+        <property name="max-length">5</property>
+        <property name="tooltip-text">Y coordinate of the screen position where the click will be executed.</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkDropDown" id="click_func_dropdown">
+        <property name="tooltip-text">Select the type of click to execute at the specified coordinates.</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -2,6 +2,10 @@ BDIR = ./build
 BINARY = clicker
 
 OBJS = $(patsubst src/%.c, $(BDIR)/%.o, $(wildcard src/*.c))
+OBJS += $(BDIR)/resources.o
+
+UIDIR = include/graphics/ui
+UIFILES = $(wildcard $(UIDIR)/*.ui)
 
 ifeq ($(OS), Windows_NT)
   OSFLAGS =
@@ -40,6 +44,12 @@ $(BINARY): $(OBJS)
 	@cc $(CFLAGS) $(GTKFLAGS) $(OBJS) -o $(BINARY) $(LIBS) $(GTKLIBS) $(OSFLAGS)
 
 $(BDIR)/%.o: src/%.c
+	@cc $(CFLAGS) $(GTKFLAGS) -c $< -o $@
+	
+$(BDIR)/resources.c: gresource.xml $(UIFILES) | $(BDIR)
+	glib-compile-resources gresource.xml --target=$@ --generate-source --sourcedir=include
+
+$(BDIR)/resources.o: $(BDIR)/resources.c
 	@cc $(CFLAGS) $(GTKFLAGS) -c $< -o $@
 
 $(BDIR):
