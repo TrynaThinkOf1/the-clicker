@@ -3,5 +3,7 @@
   <gresource prefix="/com/the-clicker">
     <file>graphics/ui/main_window.ui</file>
     <file>graphics/ui/click_timer.ui</file>
+
+    <file>graphics/styles/style.css</file>
   </gresource>
 </gresources>

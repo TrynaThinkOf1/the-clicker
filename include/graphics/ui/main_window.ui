@@ -5,5 +5,7 @@
   <object class="GtkApplicationWindow" id="main_window">
     <property name="title">The Clicker</property>
     <property name="resizable">False</property>
+
+    <property name="css-classes">main-window</property>
   </object>
 </interface>
