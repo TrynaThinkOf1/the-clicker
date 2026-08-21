@@ -5,6 +5,7 @@
 
 
 typedef struct ClickTimerState_t {
+  GtkApplication* app;
   GtkWindow* main_window;
   
   GtkWidget* mins_spinbtn;

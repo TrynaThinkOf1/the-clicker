@@ -31,6 +31,7 @@ static void activate(GtkApplication* app, gpointer user_data) {
   
   GtkBuilder* click_timer_builder = gtk_builder_new_from_resource("/com/the-clicker/graphics/ui/click_timer.ui");
   ClickTimerState* CT_STATE = g_new0(ClickTimerState, 1); // deliberatly leaked, actual pattern for GTK+
+  CT_STATE->app = app;
   CT_STATE->main_window = window;
 
    /*
