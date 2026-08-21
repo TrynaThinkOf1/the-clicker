@@ -5,5 +5,7 @@
     <file>graphics/ui/click_timer.ui</file>
 
     <file>graphics/styles/style.css</file>
+
+    <file compressed="true">graphics/assets/info_icon.png</file>
   </gresource>
 </gresources>
