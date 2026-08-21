@@ -4,26 +4,13 @@
 #include <gtk/gtk.h>
 #include <stdbool.h>
 
+#include "graphics/state.h"
+#include "graphics/callbacks/clickTimerInfoDialog.h"
 #include "graphics/callbacks/loadClickTimerFunc.h"
 #include "graphics/callbacks/toggleClickTimer.h"
-#include "graphics/state.h"
 #include "graphics/callbacks/numberOnlyEntry.h"
 
 static void activate(GtkApplication* app, gpointer user_data) {
-  // GtkWidget* main_window;
-
-  // main_window = gtk_application_window_new(app);
-  // gtk_window_set_title(GTK_WINDOW(main_window), "The Clicker");
-
-  /*
-   * GtkCssProvider *provider = gtk_css_provider_new();
-   gtk_css_provider_load_from_resource(provider, "/com/yourapp/graphics/style.css");
-   gtk_style_context_add_provider_for_display(
-       gdk_display_get_default(),
-       GTK_STYLE_PROVIDER(provider),
-       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-   g_object_unref(provider);
-   */
 
   /* MAIN WINDOW */
   GtkBuilder* main_window_builder = gtk_builder_new_from_resource("/com/the-clicker/graphics/ui/main_window.ui");
@@ -32,7 +19,7 @@ static void activate(GtkApplication* app, gpointer user_data) {
   /* */
 
   /* CLICK TIMER
-   *
+   *             Click Timer (i)
    * [HOURS ENTRY] [MINS ENTRY] [SECS ENTRY]
    * [X ENTRY][Y ENTRY][CLICK TYPE DROPDOWN]
    * [          START/STOP BUTTON          ]
@@ -41,20 +28,34 @@ static void activate(GtkApplication* app, gpointer user_data) {
   GtkBox* container = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_add_css_class(GTK_WIDGET(container), "click-timer-box");
   gtk_widget_set_overflow(container, GTK_OVERFLOW_HIDDEN); // make corners round
-
-  GtkWidget* info_button = gtk_button_new();
-  gtk_widget_add_css_class(info_button, "click-timer-info-button");
-  gtk_widget_set_cursor_from_name(info_button, "pointer"); // make the cursor a pointer on hover
-  
-  GtkWidget* info_icon = gtk_image_new_from_resource("/com/the-clicker/graphics/assets/info_icon.png");
-  gtk_image_set_pixel_size(GTK_IMAGE(info_icon), 16);
-  gtk_button_set_child(GTK_BUTTON(info_button), info_icon); // add the icon to the button
-
-  gtk_box_append(container, info_button);
   
   GtkBuilder* click_timer_builder = gtk_builder_new_from_resource("/com/the-clicker/graphics/ui/click_timer.ui");
   ClickTimerState* CT_STATE = g_new0(ClickTimerState, 1); // deliberatly leaked, actual pattern for GTK+
   CT_STATE->main_window = window;
+
+   /*
+    * Label and info button grid
+    */
+    GtkWidget* label_and_info_grid = gtk_grid_new();
+    gtk_widget_set_halign(label_and_info_grid, GTK_ALIGN_CENTER); // set the grid in the center of the box
+    gtk_widget_set_valign(label_and_info_grid, GTK_ALIGN_CENTER); // set the grid in the center of the box
+    
+    GtkWidget* click_timer_label = gtk_label_new("Click Timer");
+    gtk_widget_add_css_class(click_timer_label, "click-timer-label");
+    
+    GtkWidget* click_timer_info_button = gtk_button_new();
+    g_signal_connect(click_timer_info_button, "clicked", G_CALLBACK(clickTimerInfoDialog), CT_STATE);
+    gtk_widget_add_css_class(click_timer_info_button, "click-timer-info-button");
+    gtk_widget_set_cursor_from_name(click_timer_info_button, "pointer"); // make the cursor a pointer on hover
+    
+    GtkWidget* info_icon = gtk_image_new_from_resource("/com/the-clicker/graphics/assets/info_icon.png");
+    gtk_image_set_pixel_size(GTK_IMAGE(info_icon), 18);
+    gtk_button_set_child(GTK_BUTTON(click_timer_info_button), info_icon); // add the icon to the button
+  
+    gtk_grid_attach(GTK_GRID(label_and_info_grid), click_timer_label, 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(label_and_info_grid), gtk_label_new(" "), 1, 0, 1, 1); // spacer
+    gtk_grid_attach(GTK_GRID(label_and_info_grid), click_timer_info_button, 2, 0, 1, 1);
+    gtk_box_append(container, label_and_info_grid);
 
   GtkWidget* click_timer_grid = GTK_WIDGET(gtk_builder_get_object(click_timer_builder, "click_timer_grid"));
   
@@ -68,7 +69,6 @@ static void activate(GtkApplication* app, gpointer user_data) {
   g_signal_connect(gtk_editable_get_delegate(GTK_EDITABLE(CT_STATE->y_coord_entry)), "insert-text", G_CALLBACK(numberOnlyEntry), NULL);
 
   CT_STATE->click_func_dropdown = GTK_WIDGET(gtk_builder_get_object(click_timer_builder, "click_func_dropdown"));
-  //gtk_drop_down_set_selected(CT_STATE->click_func_selector, 0); // default to left click
   g_signal_connect(CT_STATE->click_func_dropdown, "notify::selected", G_CALLBACK(loadClickTimerFunc), CT_STATE);
 
   //

@@ -31,8 +31,18 @@ COLOR PALETTE:
   border-radius: 50%; /* make it a circle cus the info icon is a circle */
 
   padding: 0;
+  margin-bottom: 10px;
 }
 .click-timer-info-button:hover {
+}
+.click-timer-label {
+  box-shadow: none;
+  
+  font-size: 1.5em;
+  font-weight: bolder;
+  color: #fbc4ab;
+
+  margin-bottom: 10px;
 }
 .time-spinbtn {
   background-color: whitesmoke;
