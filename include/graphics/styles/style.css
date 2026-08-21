@@ -1,2 +1,73 @@
+/*
+COLOR PALETTE:
+#250902 -> "Rich Mahogany"
+#38040e -> "Deep Wood"
+#640d14 -> "Black Cherry"
+#800e13 -> "Dark Wine"
+#ad2831 -> "Brown Red"
+*/
+
 .main-window {
+  background-color: #38040e;
+}
+
+.click-timer-box {
+  background-color: #640d14;
+  
+  margin: 1em;
+  padding: 1em;
+  
+  border-style: solid;
+  border-width: 1px;
+  border-color: #945D5E;
+  border-radius: 1em;
+}
+.click-timer-info-button {
+  /* make it transparent */
+  background: none;
+  box-shadow: none;
+
+  border: none;
+  border-radius: 50%; /* make it a circle cus the info icon is a circle */
+
+  padding: 0;
+}
+.click-timer-info-button:hover {
+}
+.time-spinbtn {
+  background-color: whitesmoke;
+  
+  color: #640d14;
+  font-weight: bold;
+  font-size: 1.25em;
+
+  border-color: #945D5E;
+  border-radius: 0.5em;
+}
+.coord-entry {
+  background-color: whitesmoke;
+  
+  color: #640d14;
+  font-weight: bold;
+  font-size: 1.25em;
+
+  border-color: #945D5E;
+  border-radius: 0.5em;
+}
+.start-stop-button {
+  color: #800e13;
+  font-weight: bold;
+  font-size: 1.25em;
+
+  border-color: #945D5E;
+  border-radius: 0.5em;
+}
+.start-stop-button:hover {
+  font-style: italic;
+}
+.click-func-dropdown {
+  font-size: 1.25em;
+  
+  border-color: #945D5E;
+  border-radius: 0.5em;
 }

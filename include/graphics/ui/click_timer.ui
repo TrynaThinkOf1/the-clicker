@@ -5,6 +5,7 @@
   <object class="GtkGrid" id="click_timer_grid">
     <property name="row-spacing">8</property>
     <property name="column-spacing">8</property>
+    <property name="column-homogeneous">True</property>
 
     <child>
       <object class="GtkSpinButton" id="mins_spinbtn">
@@ -22,6 +23,8 @@
           <property name="column">0</property>
           <property name="row">0</property>
         </layout>
+
+        <property name="css-classes">time-spinbtn</property>
       </object>
     </child>
 
@@ -41,6 +44,8 @@
           <property name="column">1</property>
           <property name="row">0</property>
         </layout>
+        
+        <property name="css-classes">time-spinbtn</property>
       </object>
     </child>
 
@@ -60,6 +65,8 @@
           <property name="column">2</property>
           <property name="row">0</property>
         </layout>
+
+        <property name="css-classes">time-spinbtn</property>
       </object>
     </child>
 
@@ -71,6 +78,8 @@
           <property name="column">0</property>
           <property name="row">1</property>
         </layout>
+        
+        <property name="css-classes">coord-entry</property>
       </object>
     </child>
 
@@ -82,16 +91,34 @@
           <property name="column">1</property>
           <property name="row">1</property>
         </layout>
+
+        <property name="css-classes">coord-entry</property>
       </object>
     </child>
 
     <child>
       <object class="GtkDropDown" id="click_func_dropdown">
         <property name="tooltip-text">Type of click to execute</property>
+        <property name="enable-search">False</property>
+        <property name="selected">0</property>
+
+        <property name="model">
+          <object class="GtkStringList">
+            <items>
+              <item>Left Click</item>
+              <item>Right Click</item>
+              <item>Left Double Click</item>
+              <item>Right Double Click</item>
+            </items>
+          </object>
+        </property>
+        
         <layout>
           <property name="column">2</property>
           <property name="row">1</property>
         </layout>
+
+        <property name="css-classes">click-func-dropdown</property>
       </object>
     </child>
   </object>
