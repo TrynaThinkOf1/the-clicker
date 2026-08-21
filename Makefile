@@ -17,7 +17,7 @@ else
    	OSFLAGS = -lm
   endif
   ifeq ($(UNAME_S), Darwin)
-   	OSFLAGS = -framework ApplicationServices
+   	OSFLAGS = -framework ApplicationServices -framework Foundation -framework UserNotifications
   endif
 endif
 
