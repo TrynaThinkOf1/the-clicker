@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#include <string.h>
 #import <AppKit/AppKit.h>
 #include "graphics/sendNotification.h"
 
@@ -22,7 +23,7 @@ void send_notification(const char *title, const char *body, void *user_data) {
     NSUserNotification *notification = [[NSUserNotification alloc] init];
     notification.title = [NSString stringWithUTF8String:title];
     notification.informativeText = [NSString stringWithUTF8String:body];
-    notification.soundName = NSUserNotificationDefaultSoundName;
+    notification.soundName = NULL;
 
     // 2. CRITICAL FIX: Use a STATIC delegate.
     // If we make this a local variable, it gets destroyed when this function ends.
