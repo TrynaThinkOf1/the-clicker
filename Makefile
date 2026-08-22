@@ -18,6 +18,7 @@ else
   endif
   ifeq ($(UNAME_S), Darwin)
    	OSFLAGS = -framework ApplicationServices -framework Foundation -framework UserNotifications
+    OBJS += $(BDIR)/notifications.o
   endif
 endif
 
@@ -53,6 +54,9 @@ $(BDIR)/resources.c: gresource.xml $(UIFILES) $(CSSFILES) | $(BDIR)
 
 $(BDIR)/resources.o: $(BDIR)/resources.c
 	@cc $(CFLAGS) $(GTKFLAGS) -c $< -o $@
+
+$(BDIR)/notifications.o: src/send_notification_macos.m
+	@cc -Wno-deprecated-implementations -Wno-deprecated-declarations -I$(IDIR) -c $< -o $@
 
 $(BDIR):
 	mkdir -p $(BDIR)
