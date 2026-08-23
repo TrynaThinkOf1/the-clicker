@@ -6,6 +6,10 @@
     <string>Clicker</string>
     <key>CFBundleIdentifier</key>
     <string>com.trynathinkof1.the-clicker</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
+    <key>CFBundleIconName</key>
+    <string>AppIcon</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>0.7.5</string>
     <key>CFBundleName</key>
