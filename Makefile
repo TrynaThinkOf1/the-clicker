@@ -67,5 +67,6 @@ $(BDIR):
 clean:
 	rm -rf build/
 	rm $(BINARY)
+	rm -rf clicker.app
 
 -include $(patsubst $(BDIR)/%.o, $(BDIR)/%.d, $(OBJS))
