@@ -72,7 +72,6 @@ static void activate(GtkApplication* app, gpointer user_data) {
   g_signal_connect(gtk_editable_get_delegate(GTK_EDITABLE(CT_STATE->y_coord_entry)), "insert-text", G_CALLBACK(numberOnlyEntry), NULL);
 
   CT_STATE->click_func_dropdown = GTK_WIDGET(gtk_builder_get_object(click_timer_builder, "click_func_dropdown"));
-  g_signal_connect(CT_STATE->click_func_dropdown, "notify::selected", G_CALLBACK(loadClickTimerFunc), CT_STATE);
 
   //
 

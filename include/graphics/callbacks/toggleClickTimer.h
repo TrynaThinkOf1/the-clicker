@@ -40,6 +40,26 @@ static void toggleClickTimer(GtkWidget* button, gpointer user_data) {
     }
   }
 
+  guint pos = gtk_drop_down_get_selected(state->click_func_dropdown);
+
+  switch (pos) {
+    case 0:
+      state->click_func = leftClick;
+      break;
+    case 1:
+      state->click_func = rightClick;
+      break;
+    case 2:
+      state->click_func = leftDoubleClick;
+      break;
+    case 3:
+      state->click_func = rightDoubleClick;
+      break;
+    case GTK_INVALID_LIST_POSITION:
+      state->click_func = leftClick;
+      break;
+  }
+
   // do the threading
 
   if (!g_atomic_int_get(&state->timer_active)) {
