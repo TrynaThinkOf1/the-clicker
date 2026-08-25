@@ -33,6 +33,8 @@ static void activate(GtkApplication* app, gpointer user_data) {
   ClickTimerState* CT_STATE = g_new0(ClickTimerState, 1); // deliberatly leaked, actual pattern for GTK+
   CT_STATE->app = app;
   CT_STATE->main_window = window;
+  CT_STATE->timer_active = false;
+  CT_STATE->click_func = leftClick;
 
    /*
     * Label and info button grid
