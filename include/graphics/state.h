@@ -1,6 +1,8 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include <stdbool.h>
+
 #include <gtk/gtk.h>
 
 
@@ -11,9 +13,12 @@ typedef struct ClickTimerState_t {
   GtkWidget* mins_spinbtn;
   GtkWidget* secs_spinbtn;
   GtkWidget* ms_spinbtn;
+  unsigned long sleep_ms;
   
   GtkWidget* x_coord_entry;
   GtkWidget* y_coord_entry;
+  int x;
+  int y;
   
   GtkWidget* click_func_dropdown;
   
@@ -25,7 +30,8 @@ typedef struct ClickTimerState_t {
   int x_coord;
   int y_coord;
 
-  // instead of having a pthread like earlier, we just push the function to the GTK main loop
+  volatile gint timer_active;
+  GThread* timer_thread;
 } ClickTimerState;
 
 #endif /* STATE_H */
