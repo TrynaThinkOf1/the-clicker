@@ -8,12 +8,19 @@
 
 static gpointer clickTimer(gpointer user_data) {
   ClickTimerState* state = (ClickTimerState*)user_data;
-  
+
   while (g_atomic_int_get(&state->timer_active)) {
-    g_usleep(state->sleep_ms * 1000);
-    state->click_func(state->x, state->y);
+    gulong remaining = state->sleep_ms;
+    
+    while (remaining > 0 && g_atomic_int_get(&state->timer_active)) {
+      gulong chunk = remaining < 50 ? remaining : 50;
+      g_usleep(chunk * 1000);
+      remaining -= chunk;
+    }
+    
+    if (g_atomic_int_get(&state->timer_active)) state->click_func(state->x, state->y);
   }
-  
+
   return NULL;
 }
 

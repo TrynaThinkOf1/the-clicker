@@ -13,12 +13,10 @@ typedef struct ClickTimerState_t {
   GtkWidget* mins_spinbtn;
   GtkWidget* secs_spinbtn;
   GtkWidget* ms_spinbtn;
-  unsigned long sleep_ms;
+  guint64 sleep_ms;
   
   GtkWidget* x_coord_entry;
   GtkWidget* y_coord_entry;
-  int x;
-  int y;
   
   GtkWidget* click_func_dropdown;
   
@@ -27,8 +25,8 @@ typedef struct ClickTimerState_t {
   // now to the actual functionality
 
   void (*click_func)(int, int);
-  int x_coord;
-  int y_coord;
+  int x;
+  int y;
 
   volatile gint timer_active;
   GThread* timer_thread;
