@@ -3,6 +3,8 @@
 
 #include <gtk/gtk.h>
 
+#include "graphics/state.h"
+
 static void clickTimerInfoDialog(GtkWidget* button, gpointer user_data) {
   ClickTimerState* state = (ClickTimerState*)user_data;
   
@@ -19,7 +21,7 @@ static void clickTimerInfoDialog(GtkWidget* button, gpointer user_data) {
   gtk_alert_dialog_set_buttons (dialog, buttons);
   gtk_alert_dialog_set_cancel_button (dialog, 0); // make the cancel button an Ok button instead
   
-  gtk_alert_dialog_show(dialog, state->main_window);
+  gtk_alert_dialog_show(dialog, GTK_WINDOW(state->main_window));
 }
 
 #endif /* CLICKTIMERINFODIALOG_H */

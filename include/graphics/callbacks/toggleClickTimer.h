@@ -16,17 +16,17 @@ static void toggleClickTimer(GtkWidget* button, gpointer user_data) {
   // all the setup happens inside of this if statement
   if (!g_atomic_int_get(&state->timer_active)) {
 	  state->sleep_ms =
-	    (gtk_spin_button_get_value_as_int(state->mins_spinbtn) * 60 * 1000)
-	    + (gtk_spin_button_get_value_as_int(state->secs_spinbtn) * 1000)
-	    + gtk_spin_button_get_value_as_int(state->ms_spinbtn);
+	    (gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(state->mins_spinbtn)) * 60 * 1000)
+	    + (gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(state->secs_spinbtn)) * 1000)
+	    + gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(state->ms_spinbtn));
 
 	  if (state->sleep_ms <= 0) {
 	    send_notification("Invalid Wait Time", "Timer must be for more than 0ms between clicks", state->app);
 	    return;
 	  }
 
-	  const char* xstr = gtk_entry_buffer_get_text(gtk_entry_get_buffer(state->x_coord_entry));
-	  const char* ystr = gtk_entry_buffer_get_text(gtk_entry_get_buffer(state->y_coord_entry));
+	  const char* xstr = gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(state->x_coord_entry)));
+	  const char* ystr = gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(state->y_coord_entry)));
 
 	  if (strlen(xstr) == 0 || strlen(ystr) == 0) {
 	    state->x = -1;
@@ -42,7 +42,7 @@ static void toggleClickTimer(GtkWidget* button, gpointer user_data) {
 	    }
 	  }
 
-	  guint pos = gtk_drop_down_get_selected(state->click_func_dropdown);
+	  guint pos = gtk_drop_down_get_selected(GTK_DROP_DOWN(state->click_func_dropdown));
 
 	  switch (pos) {
 	    case 0:
