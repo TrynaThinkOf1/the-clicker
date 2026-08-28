@@ -5,10 +5,12 @@
 
 #include <gtk/gtk.h>
 
+#include "macros.h"
+
 
 typedef struct ClickTimerState_t {
   GtkApplication* app;
-  GtkWindow* main_window;
+  GtkApplicationWindow* main_window;
   
   GtkWidget* mins_spinbtn;
   GtkWidget* secs_spinbtn;
@@ -31,5 +33,18 @@ typedef struct ClickTimerState_t {
   volatile gint timer_active;
   GThread* timer_thread;
 } ClickTimerState;
+
+/* */
+
+typedef struct MacroEditorState_t {
+  GtkApplication* app;
+  GtkApplicationWindow* main_window;
+  GtkWindow* editor_window;
+
+  GtkWidget* macro_name_entry;
+  char* macro_name_easy;
+
+  Macro* mac;
+} MacroEditorState;
 
 #endif /* STATE_H */
