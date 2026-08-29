@@ -8,5 +8,7 @@
     <file>graphics/styles/style.css</file>
 
     <file compressed="true">graphics/assets/info_icon.png</file>
+    <file compressed="true">graphics/assets/plus_icon.png</file>
+    <file compressed="true">graphics/assets/import_icon.png</file>
   </gresource>
 </gresources>
