@@ -2,6 +2,49 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
 
+  <object class="GtkGrid" id="label_and_info_grid">
+    <property name="halign">center</property>
+    <property name="valign">center</property>
+  
+    <child>
+      <object class="GtkLabel" id="click_timer_label">
+        <property name="label">Click Timer</property>
+        <property name="css-classes">click-timer-label</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+
+    <!-- spacer between label and button-->
+    <child>
+      <object class="GtkLabel">
+        <property name="label"> </property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+  
+    <child>
+      <object class="GtkButton" id="click_timer_info_button">
+        <property name="css-classes">click-timer-info-button</property>
+        <child>
+          <object class="GtkImage" id="click_timer_info_icon">
+            <property name="resource">/com/the-clicker/graphics/assets/info_icon.png</property>
+            <property name="pixel-size">18</property>
+          </object>
+        </child>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+
   <object class="GtkGrid" id="click_timer_grid">
     <property name="row-spacing">8</property>
     <property name="column-spacing">8</property>
