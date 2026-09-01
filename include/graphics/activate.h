@@ -5,20 +5,20 @@
 
 #include <gtk/gtk.h>
 
-#include "graphics/callbacks/createMacroLoader.h"
 #include "graphics/state.h"
+#include "graphics/close_request.h"
+#include "graphics/callbacks/createClickTimer.h"
+#include "graphics/callbacks/createMacroLoader.h"
 #include "graphics/callbacks/macroLoaderInfoDialog.h"
 #include "graphics/callbacks/clickTimerInfoDialog.h"
 #include "graphics/callbacks/toggleClickTimer.h"
 #include "graphics/callbacks/numberOnlyEntry.h"
 
-#include "graphics/callbacks/createClickTimer.h"
-
 static void activate(GtkApplication* app, gpointer user_data) {
-
   /* MAIN WINDOW */
   GtkBuilder* main_window_builder = gtk_builder_new_from_resource("/com/the-clicker/graphics/ui/main_window.ui");
   GtkApplicationWindow* window = GTK_APPLICATION_WINDOW(gtk_builder_get_object(main_window_builder, "main_window"));
+  g_signal_connect(window, "close-request", G_CALLBACK(close_request), app);
   gtk_window_set_application(GTK_WINDOW(window), app);
 
   GtkWidget* container = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
