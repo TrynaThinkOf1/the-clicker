@@ -1,6 +1,8 @@
 #ifndef HELPMENU_H
 #define HELPMENU_H
 
+#include <stdbool.h>
+
 #include <gtk/gtk.h>
 
 struct temp_data_holder {
@@ -10,26 +12,80 @@ struct temp_data_holder {
 
 static void about_window_loader(GSimpleAction* action, GVariant* parameter, gpointer user_data) {
   const struct temp_data_holder* data = (struct temp_data_holder*)user_data;
-}
-// static void createHelpMenu(GtkApplication* app) {
-//   GMenu* menubar = g_menu_new();
-  
-//   GMenu* program_help_submenu = g_menu_new();
-//   g_menu_append(program_help_submenu, "Program Help", "app.help");
-//   GSimpleAction* program_help_action = g_simple_action_new("help", NULL);
-//   g_signal_connect(program_help_action, "activate", G_CALLBACK(on_program_help_activate), app);
-//   g_action_map_add_action(G_ACTION_MAP(app), G_ACTION(program_help_action));
-//   g_menu_append_submenu(menubar, "Help", G_MENU_MODEL(program_help_submenu));
 
-//   GMenu* error_help_submenu = g_menu_new();
-//   g_menu_append(error_help_submenu, "Error Help", "app.help");
-//   GSimpleAction* error_help_action = g_simple_action_new("help", NULL);
-//   g_signal_connect(error_help_submenu, "activate", G_CALLBACK(on_error_help_activate), app);
-//   g_action_map_add_action(G_ACTION_MAP(app), G_ACTION(error_help_action));
-//   g_menu_append_submenu(program_help_submenu, "Error Help", G_MENU_MODEL(error_help_submenu));
+  GtkWindow* window = gtk_window_new();
+  //gtk_window_set_default_size(window, 500, 300); // commented out so the window sets its own size
+  gtk_window_set_resizable(window, false);
+
+  GtkWidget* box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
+  GtkWidget* title = gtk_label_new("");
+  gtk_label_set_justify(title, GTK_JUSTIFY_CENTER);
+  gtk_label_set_use_markup(title, true);
+  gtk_widget_set_margin_top(title, 2);
+  gtk_widget_set_margin_bottom(title, 5);
   
-//   gtk_application_set_menubar(app, G_MENU_MODEL(menubar));
-// }
+  GtkWidget* content = gtk_label_new("");
+  gtk_label_set_max_width_chars(GTK_LABEL(content), 70);
+  gtk_label_set_wrap(GTK_LABEL(content), true);
+  gtk_label_set_wrap_mode(GTK_LABEL(content), PANGO_WRAP_WORD_CHAR);
+  gtk_label_set_justify(GTK_LABEL(content), GTK_JUSTIFY_LEFT);
+  gtk_label_set_use_markup(content, true);
+  gtk_widget_set_margin_top(title, 0);
+  gtk_widget_set_margin_start(title, 2);
+  gtk_widget_set_margin_end(title, 2);
+  gtk_widget_set_margin_bottom(title, 2);
+
+  switch (data->option) {
+    case 0:
+        gtk_window_set_title(window, "About the Program");
+        gtk_label_set_markup(GTK_LABEL(title),
+          "<span size=\"large\" weight=\"bold\">The Clicker</span>"
+        );
+        gtk_label_set_markup(GTK_LABEL(content),
+          "It is a relatively simple-to-use autoclicker application "
+          "for MacOS, Linux, and Windows. "
+          "It comes with two main features: the click timer, and the macro runner. "
+          "The click timer is literally just an autoclicker.\n\n"
+          "<big>How to use the click timer</big>\n"
+          "<b>1.</b> Select how much time should happen in between clicks (min, sec, ms)\n"
+          "\t<small>minimum is 1ms, maximum is 120 mins, 59 secs, and 999 ms</small>\n\n"
+          "<b>2.</b> Select your click type from the drop-down menu below the timer input\n"
+          "\t<small>the options are a single Left Click, a double Left Click, a single Right Click, and a double Right click.</small>\n\n"
+          "<b>3.</b> Fill in the coordinates for where the clicks should happen on your screen, these numbers typically range "
+          "from 0 to 1920 in the X axis and 0 to 1080 in the Y axis\n"
+          "\t<small>your computer may vary, check your resolution in your settings or preferences application)\n"
+          "\tleave both inputs blank to simply have the clicks happen wherever your cursor is at the moment of click execution.</small>\n\n"
+          "<b>4.</b> Once all options are set and validated <i>(the app will let you know if you have "
+          "any invalid options)</i>, click the <u>START</u> button and the clicks will begin happening "
+          "at regular intervals executing your "
+          "selected click type at the desired location until the <u>STOP</u> button is clicked.\n"
+        );
+        break;
+    case 1:
+        gtk_window_set_title(window, "Technical Information");
+        gtk_label_set_markup(GTK_LABEL(content), 
+          "__It is written in C.__"
+        );
+        break;
+    case 2:
+        gtk_window_set_title(window, "About the Authors");
+        gtk_label_set_markup(GTK_LABEL(content), 
+          "Zevi Berlin"
+        );
+        break;
+    default:
+      break;
+  };
+
+  gtk_box_append(GTK_BOX(box), title);
+  gtk_box_append(GTK_BOX(box), content);
+
+  gtk_window_set_child(window, GTK_BOX(box));
+
+  gtk_window_set_application(window, data->app);
+  gtk_window_present(window);
+}
 
 static void createHelpMenu(GtkApplication* app) {
   GMenu* menubar = g_menu_new();
