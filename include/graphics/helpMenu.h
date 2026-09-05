@@ -129,7 +129,9 @@ static void about_window_loader(GSimpleAction* action, GVariant* parameter, gpoi
     case 2:
       gtk_window_set_title(window, "About the Authors");
       gtk_label_set_markup(GTK_LABEL(content),
-        ""
+        "<b>Zevi Berlin</b>:\t"
+        "<a href=\"mailto:zeviberlin@protonmail.com\">zeviberlin@protonmail.com</a>\t"
+        "<a href=\"https://www.github.com/trynathinkof1/\">GitHub (TrynaThinkOf1)</a>\n"
       );
       break;
     default:
