@@ -22,8 +22,8 @@ static void about_window_loader(GSimpleAction* action, GVariant* parameter, gpoi
   GtkWidget* title = gtk_label_new("");
   gtk_label_set_justify(title, GTK_JUSTIFY_CENTER);
   gtk_label_set_use_markup(title, true);
-  gtk_widget_set_margin_top(title, 2);
-  gtk_widget_set_margin_bottom(title, 5);
+  gtk_widget_set_margin_top(title, 10);
+  gtk_widget_set_margin_bottom(title, 10);
   
   GtkWidget* content = gtk_label_new("");
   gtk_label_set_max_width_chars(GTK_LABEL(content), 70);
@@ -31,49 +31,107 @@ static void about_window_loader(GSimpleAction* action, GVariant* parameter, gpoi
   gtk_label_set_wrap_mode(GTK_LABEL(content), PANGO_WRAP_WORD_CHAR);
   gtk_label_set_justify(GTK_LABEL(content), GTK_JUSTIFY_LEFT);
   gtk_label_set_use_markup(content, true);
-  gtk_widget_set_margin_top(title, 0);
-  gtk_widget_set_margin_start(title, 2);
-  gtk_widget_set_margin_end(title, 2);
-  gtk_widget_set_margin_bottom(title, 2);
+  gtk_widget_set_margin_start(content, 10);
+  gtk_widget_set_margin_end(content, 10);
+  gtk_widget_set_margin_bottom(content, 10);
+  gtk_label_set_markup(GTK_LABEL(title),
+    "<span size=\"large\" weight=\"bold\">The Clicker</span>"
+  );
 
   switch (data->option) {
     case 0:
-        gtk_window_set_title(window, "About the Program");
-        gtk_label_set_markup(GTK_LABEL(title),
-          "<span size=\"large\" weight=\"bold\">The Clicker</span>"
-        );
-        gtk_label_set_markup(GTK_LABEL(content),
-          "It is a relatively simple-to-use autoclicker application "
-          "for MacOS, Linux, and Windows. "
-          "It comes with two main features: the click timer, and the macro runner. "
-          "The click timer is literally just an autoclicker.\n\n"
-          "<big>How to use the click timer</big>\n"
-          "<b>1.</b> Select how much time should happen in between clicks (min, sec, ms)\n"
-          "\t<small>minimum is 1ms, maximum is 120 mins, 59 secs, and 999 ms</small>\n\n"
-          "<b>2.</b> Select your click type from the drop-down menu below the timer input\n"
-          "\t<small>the options are a single Left Click, a double Left Click, a single Right Click, and a double Right click.</small>\n\n"
-          "<b>3.</b> Fill in the coordinates for where the clicks should happen on your screen, these numbers typically range "
-          "from 0 to 1920 in the X axis and 0 to 1080 in the Y axis\n"
-          "\t<small>your computer may vary, check your resolution in your settings or preferences application)\n"
-          "\tleave both inputs blank to simply have the clicks happen wherever your cursor is at the moment of click execution.</small>\n\n"
-          "<b>4.</b> Once all options are set and validated <i>(the app will let you know if you have "
-          "any invalid options)</i>, click the <u>START</u> button and the clicks will begin happening "
-          "at regular intervals executing your "
-          "selected click type at the desired location until the <u>STOP</u> button is clicked.\n"
-        );
-        break;
+      gtk_window_set_title(window, "About the Program");
+      gtk_label_set_markup(GTK_LABEL(content),
+        "It is a relatively simple-to-use autoclicker application "
+        "for MacOS, Linux, and Windows. "
+        "It comes with two main features: the click timer, and the macro runner. "
+        "The click timer is literally just an autoclicker.\n\n"
+        "<big>How to use the click timer</big>\n"
+        "<b>1.</b> Select how much time should happen in between clicks (min, sec, ms)\n"
+        "\t<small>minimum is 1ms, maximum is 120 mins, 59 secs, and 999 ms</small>\n\n"
+        "<b>2.</b> Select your click type from the drop-down menu below the timer input\n"
+        "\t<small>the options are a single Left Click, a double Left Click, a single Right Click, and a double Right click.</small>\n\n"
+        "<b>3.</b> Fill in the coordinates for where the clicks should happen on your screen, these numbers typically range "
+        "from 0 to 1920 in the X axis and 0 to 1080 in the Y axis\n"
+        "\t<small>your computer may vary, check your resolution in your settings or preferences application)\n"
+        "\tleave both inputs blank to simply have the clicks happen at your cursor at the moment of click execution.</small>\n\n"
+        "<b>4.</b> Once all options are set and validated <i>(the app will let you know if you have "
+        "any invalid options)</i>, click the <u>START</u> button and the clicks will begin happening "
+        "at regular intervals executing your "
+        "selected click type at the desired location until the <u>STOP</u> button is clicked.\n"
+      );
+      break;
     case 1:
-        gtk_window_set_title(window, "Technical Information");
-        gtk_label_set_markup(GTK_LABEL(content), 
-          "__It is written in C.__"
-        );
-        break;
+      gtk_window_set_title(window, "Technical Information");
+      gtk_label_set_markup(GTK_LABEL(content),
+        "<b>Written in</b>:\t\tC\t\t\t\t\t<small>standard C17</small>\n"
+        "<b>Compiled with</b>:\t"
+        #if defined(__clang__) && defined(__APPLE__) // first check because clang also defines __GNUC__
+          "Apple clang"
+        #elif defined(__clang__)
+          "clang"
+        #elif defined(__GNUC__) && !defined(__INTEL_COMPILER)
+          "GCC"
+        #elif defined(_MSC_VER)
+          "MSVC"
+        #elif defined(__INTEL_COMPILER)
+          "Intel"
+        #elif defined(__TINYC__)
+          "TinyCC"
+        #elif defined(__EMSCRIPTEN__)
+          "Emscripten"
+        #elif defined(__ARMCC_VERSION)
+          "ARM"
+        #else
+          #error "Unknown Compiler"
+        #endif
+        
+        "\t<small>" __VERSION__ "</small>\n"
+        "<b>Compiled for</b>:\t"
+      #if defined(__APPLE__) || defined(__MACH__)
+        "MacOS "
+      #elif defined(__LINUX__) || defined(__unix__)
+        "Linux "
+      #elif defined(__WINDOWS__) || defined(_WIN32) || defined(__WIN64__)
+        "Windows "
+      #else
+        #error "Unknown Operating System"
+      #endif
+
+      #if defined(__x86_64__) || defined(_M_X64)
+        "x86_64"
+      #elif defined(__i386__) || defined(_M_IX86)
+        "x86"
+      #elif defined(__aarch64__) || defined(_M_ARM64)
+        "arm64"
+      #elif defined(__arm__) || defined(_M_ARM)
+        "arm"
+      #else
+        #error "Unknown Architecture"
+      #endif
+        "\n"
+        "<b>Built with</b>:\t\tGNU Make\t\t\t<small>version 3.81</small>\n"
+        "<b>Libraries</b>:\n"
+        "\tgtk 4.0"
+        "\tgdk 2.0"
+        "\tgio 2.0"
+        "\t\tglib 2.0\n"
+        "\tpango"
+        "\tcairo"
+        "\tgraphene"
+        "\tgettext\n"
+        "\n"
+        "<b>Editor</b>:\tZed\t<small>version 1.17.2</small>\n"
+        "<b>Offical Repo</b>:\t<a href=\"https://www.github.com/trynathinkof1/the-clicker/\">"
+        "https://www.github.com/trynathinkof1/the-clicker/</a>\n"
+      );
+      break;
     case 2:
-        gtk_window_set_title(window, "About the Authors");
-        gtk_label_set_markup(GTK_LABEL(content), 
-          "Zevi Berlin"
-        );
-        break;
+      gtk_window_set_title(window, "About the Authors");
+      gtk_label_set_markup(GTK_LABEL(content),
+        ""
+      );
+      break;
     default:
       break;
   };
