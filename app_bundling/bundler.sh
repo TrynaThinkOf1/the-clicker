@@ -6,8 +6,8 @@ fi
 if [ -f clicker ]; then
   mkdir -p dmg_content/clicker.app/Contents/{MacOS,Resources} # Create the actual app bundle holder
 
-  cp macos_app_bundling/Info.plist dmg_content/clicker.app/Contents/
-  cp macos_app_bundling/icon.icns dmg_content/clicker.app/Contents/Resources/AppIcon.icns
+  cp app_bundling/Info.plist dmg_content/clicker.app/Contents/
+  cp app_bundling/icon.icns dmg_content/clicker.app/Contents/Resources/AppIcon.icns
 
   cp clicker dmg_content/clicker.app/Contents/MacOS/
 
