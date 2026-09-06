@@ -94,10 +94,6 @@
     fprintf(fp, "\"%s\": {\n", mac->name);
 
     macro_part* p = mac->first;
-    if (p == NULL) {
-      *error = "Cannot save empty macro!";
-      return false;
-    }
 
     while (p != NULL) {
       char* name = getFuncName(p->func);
