@@ -8,7 +8,7 @@
 #include "macros.h"
 
 
-typedef struct ClickTimerState_t {
+typedef struct {
   GtkApplication* app;
   GtkApplicationWindow* main_window;
   
@@ -36,7 +36,7 @@ typedef struct ClickTimerState_t {
 
 /* */
 
-typedef struct MacroEditorState_t {
+typedef struct {
   GtkApplication* app;
   GtkApplicationWindow* main_window;
   GtkWindow* editor_window;

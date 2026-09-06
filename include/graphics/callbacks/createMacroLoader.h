@@ -5,6 +5,7 @@
 
 #include "graphics/state.h"
 #include "graphics/callbacks/macroLoaderInfoDialog.h"
+#include "graphics/callbacks/createMacro.h"
 
 /* 
  *    Macro Editor (i)
@@ -26,15 +27,18 @@ static void createMacroLoader(GtkApplication* app, GtkWidget* window, GtkWidget*
   /*
    * Label and info button grid
    */
-   GtkWidget* label_and_info_grid = GTK_WIDGET(gtk_builder_get_object(macro_loader_builder, "label_and_info_grid"));
-   
-   GtkWidget* macro_loader_info_button = GTK_WIDGET(gtk_builder_get_object(macro_loader_builder, "macro_loader_info_button"));
-   g_signal_connect(macro_loader_info_button, "clicked", G_CALLBACK(macroLoaderInfoDialog), state);
-   gtk_widget_set_cursor_from_name(macro_loader_info_button, "pointer"); // make the cursor a pointer on hover
- 
-   gtk_box_append(GTK_BOX(macro_loader_container), label_and_info_grid);
+    GtkWidget* label_and_info_grid = GTK_WIDGET(gtk_builder_get_object(macro_loader_builder, "label_and_info_grid"));
+    
+    GtkWidget* macro_loader_info_button = GTK_WIDGET(gtk_builder_get_object(macro_loader_builder, "macro_loader_info_button"));
+    g_signal_connect(macro_loader_info_button, "clicked", G_CALLBACK(macroLoaderInfoDialog), state);
+    gtk_widget_set_cursor_from_name(macro_loader_info_button, "pointer"); // make the cursor a pointer on hover
+  
+    gtk_box_append(GTK_BOX(macro_loader_container), label_and_info_grid);
 
   GtkWidget* macro_loader_grid = gtk_builder_get_object(macro_loader_builder, "macro_loader_grid");
+
+  state->macro_name_entry = GTK_WIDGET(gtk_builder_get_object(macro_loader_builder, "macro_name_entry"));
+  g_signal_connect(GTK_BUTTON(gtk_builder_get_object(macro_loader_builder, "create_button")), "clicked", G_CALLBACK(createMacro), state);
    
   gtk_box_append(macro_loader_container, macro_loader_grid);
   gtk_box_append(GTK_BOX(container), macro_loader_container);
