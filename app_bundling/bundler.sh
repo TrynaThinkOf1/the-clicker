@@ -12,9 +12,14 @@ if [ -f clicker ]; then
   cp clicker dmg_content/clicker.app/Contents/MacOS/
 
   # link the gtk/glib/pango/cairo dylibs to the binary
-  dylibbundler -od -b -x dmg_content/clicker.app/Contents/MacOS/clicker \
-  -d dmg_content/clicker.app/Contents/Frameworks \
-  -p @executable_path/../Frameworks
+  if [ "$1" = "production" ]; then
+    echo "Building for production WITH linking to /Frameworks"
+    dylibbundler -od -b -x dmg_content/clicker.app/Contents/MacOS/clicker \
+    -d dmg_content/clicker.app/Contents/Frameworks \
+    -p @executable_path/../Frameworks
+  else
+    echo "Building for testing WITHOUT linking to /Frameworks"
+  fi
 else
   echo "[ERROR] No ``clicker`` binary found!"
 fi
