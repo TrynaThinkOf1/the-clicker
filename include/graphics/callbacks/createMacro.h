@@ -22,7 +22,7 @@ static void createMacro(GtkWidget* widget, gpointer user_data) {
   const int len = strlen(state->macro_name_easy); // between 0 and 50
   
   if (len == 0) {
-    send_notification("Invalid Macro Name", "Cannot load a macro with an empty name", state->app);
+    send_notification("Invalid Macro Name", "Cannot create a macro with an empty name", state->app);
     return;
   }
 
@@ -48,6 +48,10 @@ static void createMacro(GtkWidget* widget, gpointer user_data) {
   send_notification("Successfully created macro", body, state->app);
 
   state->mac = mac;
+
+  /*
+   * TODO: Create the editor window and load in the brand new blank macro.
+   */
 }
 
 #endif /* CREATEMACRO_H */

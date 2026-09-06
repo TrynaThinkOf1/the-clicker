@@ -3,6 +3,7 @@
 
 #include <gtk/gtk.h>
 
+#include "graphics/callbacks/importMacro.h"
 #include "graphics/state.h"
 #include "graphics/callbacks/macroLoaderInfoDialog.h"
 #include "graphics/callbacks/createMacro.h"
@@ -38,7 +39,9 @@ static void createMacroLoader(GtkApplication* app, GtkWidget* window, GtkWidget*
   GtkWidget* macro_loader_grid = gtk_builder_get_object(macro_loader_builder, "macro_loader_grid");
 
   state->macro_name_entry = GTK_WIDGET(gtk_builder_get_object(macro_loader_builder, "macro_name_entry"));
+  
   g_signal_connect(GTK_BUTTON(gtk_builder_get_object(macro_loader_builder, "create_button")), "clicked", G_CALLBACK(createMacro), state);
+  g_signal_connect(GTK_BUTTON(gtk_builder_get_object(macro_loader_builder, "import_button")), "clicked", G_CALLBACK(importMacroCallback), state);
    
   gtk_box_append(macro_loader_container, macro_loader_grid);
   gtk_box_append(GTK_BOX(container), macro_loader_container);
