@@ -39,4 +39,8 @@ void removeMacroStep(Macro* mac, int offset);
 
 void runMacro(const Macro* mac);
 
+inline bool macro_partEqual(const macro_part* a, const macro_part* b) {
+  return (a->x == b->x) && (a->y == b->y) && (a->func == b->func);
+}
+
 #endif /* MACROS_H */
