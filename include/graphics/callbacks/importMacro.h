@@ -3,6 +3,7 @@
 
 #include <gtk/gtk.h>
 
+#include "graphics/callbacks/createEditorWindow.h"
 #include "graphics/state.h"
 #include "graphics/sendNotification.h"
 #include "macros.h"
@@ -32,9 +33,7 @@ static void importMacroCallback(GtkWidget* widget, gpointer user_data) {
 
   state->mac = mac;
 
-  /*
-   * TODO: Create editor window
-   */
+  createEditorWindow(state);
 }
 
 #endif /* IMPORTMACRO_H */

@@ -6,6 +6,7 @@
 
 #include <gtk/gtk.h>
 
+#include "graphics/callbacks/createEditorWindow.h"
 #include "graphics/state.h"
 #include "graphics/sendNotification.h"
 #include "macros.h"
@@ -49,9 +50,7 @@ static void createMacro(GtkWidget* widget, gpointer user_data) {
 
   state->mac = mac;
 
-  /*
-   * TODO: Create the editor window and load in the brand new blank macro.
-   */
+  createEditorWindow(state);
 }
 
 #endif /* CREATEMACRO_H */
