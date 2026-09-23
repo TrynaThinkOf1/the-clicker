@@ -1,8 +1,6 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <stdbool.h>
-
 #include <gtk/gtk.h>
 
 #include "macros.h"
@@ -40,6 +38,10 @@ typedef struct {
   GtkApplication* app;
   GtkApplicationWindow* main_window;
   GtkWindow* editor_window;
+
+  GtkWindow* warning_window;
+  gboolean warning_up;
+  guint close_editor_window_with_unsaved_work; // if 0: user has not confirmed anything, if 1: cancel, if 2: delete unsaved work
 
   GtkWidget* macro_name_entry;
   char* macro_name_easy;
