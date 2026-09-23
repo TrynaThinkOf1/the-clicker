@@ -30,6 +30,7 @@ static void importMacroCallback(GtkWidget* widget, gpointer user_data) {
     send_notification("Failed to import macro", err, state->app);
     return;
   }
+  state->macro_name_easy = mac->name; // readjust pointer so it's safe to use
 
   state->mac = mac;
 

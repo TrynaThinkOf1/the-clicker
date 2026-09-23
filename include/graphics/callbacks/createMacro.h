@@ -33,10 +33,16 @@ static void createMacro(GtkWidget* widget, gpointer user_data) {
     return;
   }
 
-  char new_name[len + 1];
+  char* new_name = malloc(sizeof(char) * (len + 1));
+  if (new_name == NULL) {
+    send_notification("Failed to create macro", "Memory allocation for the new macro failed", state->app);
+    return;
+  }
+  
   strlcpy(new_name, state->macro_name_easy, len + 1);
   // new_name[len] = '\0'; // the size'th character gets the null terminator
   mac->name = new_name;
+  state->macro_name_easy = new_name; // readjust pointer so it's safe to use
 
   char* err;
   if (!exportMacro(mac, &err)) {
@@ -49,6 +55,7 @@ static void createMacro(GtkWidget* widget, gpointer user_data) {
   send_notification("Successfully created macro", body, state->app);
 
   state->mac = mac;
+  mac->saved = false;
 
   createEditorWindow(state);
 }
